@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>固定回答とAI回答の比較｜恋愛診断11パターン</title>
+  <style>
+    :root{
+      --bg:#f4f2ed;--paper:#fff;--ink:#20242d;--muted:#667085;--line:#e2e4e9;
+      --navy:#22304a;--gold:#b7924e;--fixed:#b54747;--fixed-bg:#fff3f1;
+      --ai:#27734f;--ai-bg:#eef9f2;--diff:#8a6518;--diff-bg:#fff8df;
+      --deai:#2f6fb3;--kaiwa:#7a55aa;--kyori:#20806e;--goal:#b1602e;
+      --shadow:0 10px 30px rgba(32,36,45,.08);--radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;line-height:1.8}
+    .top{background:linear-gradient(135deg,#1e2a42,#344664);color:#fff;padding:34px 24px 28px;border-bottom:4px solid var(--gold)}
+    .top-inner{max-width:1480px;margin:auto}
+    .eyebrow{margin:0 0 6px;color:#e6cb94;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(26px,4vw,42px);line-height:1.35;letter-spacing:.01em}
+    .lead{max-width:900px;margin:12px 0 0;color:#e8ebf1;font-size:15px}
+    .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+    .stat{display:flex;align-items:baseline;gap:7px;padding:7px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08)}
+    .stat strong{font-size:20px;color:#fff}.stat span{font-size:12px;color:#d7dce7}
+    .layout{max-width:1320px;margin:0 auto;padding:28px 24px 34px}
+    main{min-width:0}
+    .notice{margin-bottom:16px;padding:12px 15px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;color:var(--muted);font-size:13px}
+    .type-panel{scroll-margin-top:90px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .type-panel+.type-panel{margin-top:28px}
+    .type-hero{padding:24px 26px;background:linear-gradient(135deg,#fff,#f6f8fb);border-bottom:1px solid var(--line)}
+    .type-topline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:900;background:#eef2f8;color:var(--navy)}
+    .pill.coverage{background:#f3efe6;color:#735b2d}
+    .type-hero h2{margin:0;font-size:clamp(23px,3vw,34px);line-height:1.35;color:var(--navy)}
+    .hypothesis{margin:9px 0 16px;color:#4c5668;font-weight:600}
+    .facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+    .fact{padding:5px 9px;border-radius:8px;background:#fff;border:1px solid #dfe3ea;font-size:12px;font-weight:700}
+    .meta-line{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);gap:12px;margin-top:15px}
+    .meta-box{padding:12px 14px;border-radius:10px;background:#fff;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+    .meta-box strong{display:block;color:var(--ink);margin-bottom:2px}
+    .comparisons{padding:22px 26px 28px}
+    .result-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+    .result-screen{min-width:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 7px 20px rgba(32,36,45,.06)}
+    .screen-heading{padding:16px 18px;border-bottom:1px solid var(--line)}
+    .screen-title{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:16px;font-weight:900}
+    .screen-badge{border:1px solid currentColor;border-radius:999px;padding:2px 9px;font-size:10px;letter-spacing:.06em}
+    .screen-note{margin:4px 0 0;font-size:11px;line-height:1.55;opacity:.82}
+    .fixed-screen{border-top:5px solid var(--fixed)}.fixed-screen .screen-heading{background:#fbe8e5;color:var(--fixed)}
+    .ai-screen{border-top:5px solid var(--ai)}.ai-screen .screen-heading{background:#dff3e7;color:var(--ai)}
+    .screen-body{display:grid}
+    .result-item{padding:17px 18px;min-width:0}
+    .result-item+.result-item{border-top:1px solid var(--line)}
+    .fixed-screen .result-item{background:var(--fixed-bg)}.ai-screen .result-item{background:var(--ai-bg)}
+    .result-item-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+    .result-item-no{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:900;flex:0 0 auto}
+    .result-item h3{margin:0;font-size:14px;line-height:1.45;color:var(--navy)}
+    .result-item p{margin:0;font-size:14px;line-height:1.9;white-space:pre-line}
+    .result-diff{margin-top:12px;padding:9px 11px;border:1px solid #eadca4;border-radius:9px;background:var(--diff-bg);color:#6f571f;font-size:11px;line-height:1.6}
+    .result-diff strong{display:block;color:var(--diff);margin-bottom:1px}
+    .footer{max-width:1480px;margin:0 auto;padding:4px 24px 36px;color:var(--muted);font-size:12px}
+    .footer a{color:var(--navy)}
+    .cat-deai .type-hero{border-top:5px solid var(--deai)}
+    .cat-kaiwa .type-hero{border-top:5px solid var(--kaiwa)}
+    .cat-kyori .type-hero{border-top:5px solid var(--kyori)}
+    .cat-goal .type-hero{border-top:5px solid var(--goal)}
+    @media(max-width:980px){
+      .layout{padding:18px}.meta-line{grid-template-columns:1fr}
+    }
+    @media(max-width:720px){
+      .top{padding:26px 18px 22px}.lead{font-size:13px}.layout{padding:12px}.type-hero,.comparisons{padding:18px 16px}.result-columns{grid-template-columns:1fr}.result-item p{font-size:13px}.type-hero h2{font-size:23px}.facts{gap:5px}.fact{font-size:11px}
+    }
+    @media print{
+      body{background:#fff}.top{background:#fff;color:#111;border-bottom:2px solid #777;padding:10px 0}.top .eyebrow,.lead,.stats,.notice,.footer{display:none!important}.top h1{color:#111;font-size:22px}.layout{display:block;max-width:none;padding:0}.type-panel{box-shadow:none;border:1px solid #aaa;border-radius:0;break-before:page}.type-panel:first-child{break-before:auto}.type-hero{padding:12px 14px}.type-hero h2{font-size:20px}.comparisons{padding:10px}.result-columns{gap:8px}.result-screen{box-shadow:none;border-radius:0}.screen-heading{padding:8px}.result-item{padding:8px;break-inside:avoid}.result-item p{font-size:9px;line-height:1.5}.result-diff{font-size:8px;padding:5px}.meta-line{grid-template-columns:1fr 1fr}.facts{margin-top:5px}
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <p class="eyebrow">Waka恋愛ナレッジ｜回答比較デモ</p>
+      <h1>固定回答とAI回答の違い</h1>
+      <p class="lead">同じ診断タイプ・同じ想定回答で比較しています。固定回答の一般的な断定が、ナレッジを参照するAIでは、回答の引用・仮説・未確認点・Zoomでの個別確認へどう変わるかを確認できます。</p>
+      <div class="stats"><div class="stat"><strong>11</strong><span>診断タイプ</span></div><div class="stat"><strong>5</strong><span>結果項目</span></div><div class="stat"><strong>55</strong><span>比較例</span></div><div class="stat"><strong>759</strong><span>元ナレッジ</span></div></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main id="main">
+      <div class="notice">このHTMLは比較資料です。AI回答は2026年9月6日時点のタグ付きナレッジをもとに作った例で、シートとの自動同期や本番API生成はまだ行っていません。</div>
+      <div id="panels"></div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    参照元：Googleスプレッドシート「Waka恋愛ナレッジ一覧」の「診断タグ」「診断タイプ定義」「結果項目定義」「Zoom勉強会ナレッジ」。固定回答は既存の <code>result_data.json</code> を使用しています。
+  </footer>
+
+  <script>
+  const LABELS=['あなたが止まっているところ','そう判断した理由','最初にやること','やってはいけないこと','無料Zoom勉強会でお伝えすること'];
+  const KEYS=['stuck','reason','fix','avoid','zoom'];
+  const CATS={
+    '出会い':{key:'deai',color:'var(--deai)'},'会話':{key:'kaiwa',color:'var(--kaiwa)'},
+    '距離の縮め方':{key:'kyori',color:'var(--kyori)'},'成功目前':{key:'goal',color:'var(--goal)'}
+  };
+  const DATA=[
+  {
+    id:'1-A',cat:'出会い',type:'出会いの接点不足タイプ',coverage:'充足（143件）',
+    hypothesis:'恋愛以前の出会い・会話接点が不足し、修正材料となる実場面が少ない可能性',
+    facts:['60代','好みは20代','Q5：0人','Q7：今は特にやっていない','Q8：月0人','Q11：デート経験なし','Q12：会話経験なし'],
+    unresolved:'生活圏・対象女性・接点を作れない具体的理由',
+    refs:['8EQ1xCGm8TY_0002','_rp7_e2laco_0001','pNDsPu1XI5w_0001'],
+    fixed:{
+      stuck:`あなたはまだ、自分に合った出会い方を知らないだけです。`,
+      reason:`あなたはこれまで、仕事など、恋愛以外の事に真剣に取り組んできた人です。その真剣さは、恋愛でも大きな武器になります。ただその分、恋愛は後回しになり、出会いのための行動がまだ始まっていません。原因はあなたの魅力ではなく、自分に合った出会い方をまだ知らないことにある可能性が高いです。`,
+      fix:`あなたが今やることは、まずは自分にあった出会い方を知ることです。行動できていないのも、出会い方がわからないからではないでしょうか。まずは、あなたの目標を達成するための、正しい出会い方を学ぶ必要があります。`,
+      avoid:`「もう少し準備してから」「自信がついてから」と先延ばしにすること。順番が逆です。自信は、行動した後についてきます。また、行動しないと直すべき課題もわかりません。`,
+      zoom:`無料Zoom勉強会では、60代のあなたが20代の女性と出会うには、どの出会い方を選べばいいのかお伝えします。多くの人が選ぶ定番の手段が、年の差恋愛では不利になる理由もわかります。勉強会が終わる頃には、「自分は何から始めればいいのか」がわかります。`
+    },
+    ai:{
+      stuck:`「今は特にやっていない」「新規女性は月0人」「デート・会話経験なし」という回答から、現在は会話術より前の、生活の中で女性との接点を作る条件が決まっていない段階だと考えられます。年齢や魅力だけを原因とは判断できません。`,
+      reason:`Waka恋愛ナレッジでは、接点がほとんどない状態では、会話や距離の縮め方を学んでも実場面に合わせた修正が難しいという見解があります。一方、今回の選択回答だけでは、時間・生活圏・不安・希望条件のどれが接点を止めているかは確定できません。`,
+      fix:`自己判断で出会い手段を増やす前に、無料Zoom勉強会で生活圏、使える時間、希望する関係、これまで動けなかった理由を確認し、最初に見直す一点を絞ります。`,
+      avoid:`準備が整うまで無期限に待つことと、理由を確認せず出会いの回数やサービスだけを増やすことです。今の状況に合わない方法を繰り返さないよう、先に停止理由を確認します。`,
+      zoom:`無料Zoom勉強会では、60代の生活状況と20代女性との関係希望を踏まえ、接点に変えられる場・避けるべき場・最初の入口を個別に確認します。選択式診断では分からない生活圏や動ける時間まで確認して、優先順位を整理します。`
+    },
+    diffs:['「知らないだけ」と断定 → 具体的回答を引用し、停止地点を仮説化','未回答の仕事ぶりまで推測 → ナレッジの見解と未確認要因を分離','自力で正解を学ばせる → Zoomで最初の確認点を絞る','行動を促して完結 → 先延ばしと無計画な手段追加の両方を防ぐ','年代別の一般説明 → 生活圏・時間・目的を個別確認']
+  },
+  {
+    id:'1-B',cat:'出会い',type:'出会い方ミスマッチタイプ',coverage:'概ね充足（41件）',
+    hypothesis:'努力量より、年齢・希望条件と現在の出会い手段の構造が合っていない可能性',
+    facts:['50代','好みは30代','Q5：1人～5人','Q7：アプリ・婚活パーティー','Q8：月0人','Q11：3千～1万円'],
+    unresolved:'各手段で会う前・会った後のどこで外れているか',
+    refs:['pyvqcQNqLZM_0003','uKPftTzfbZg_0000','pVwfJO1DgMI_0000'],
+    fixed:{
+      stuck:`あなたは、自分に合わない出会い方で頑張っているだけです。`,
+      reason:`あなたは、出会いのための行動をちゃんと続けられている人です。ここまで動けている時点で、多くの男性より前に進んでいます。それなのに新しい女性と会えていないのは、努力が足りないからではなく、自分にとって不利な場所で相手を見つけようとしている可能性が高いです。出会い方さえ合えば、その努力はそのまま結果につながります。`,
+      fix:`あなたに大事なことはこのまま同じことを続けることではありません。50代のあなたが30代の女性と実際に会えるやり方に変えることです。今のまま回数を増やしても、結果は変わりません。`,
+      avoid:`今のままのやり方を続けること。あなたの恋愛がうまくいかないのは、あなたの魅力や相性のせいではなく、やり方の問題です。`,
+      zoom:`行動しているのに理想の女性に出会えないのは、つらいことです。しかし悲観する必要はありません。たいていは、自分に不利な出会い方を選んでいるだけです。無料Zoom勉強会では、50代のあなたが30代の女性と出会うにはどの出会い方が有利なのか、その見極め方と、今の努力が報われない本当の理由をお伝えします。`
+    },
+    ai:{
+      stuck:`「マッチングアプリと婚活パーティーを利用」「新規女性は月0人」「デートでは3千～1万円を使用」という回答から、行動量そのものより、会う前の選別か、会う約束へ移る段階で止まっている可能性があります。`,
+      reason:`ナレッジ内では、プロフィールや条件比較が先に起きる出会い方では、会話の前に候補から外れる場合があるという見解があります。ただし、今回の回答だけでは、プロフィール・連絡・希望条件・日程のどこが影響しているかまでは分かりません。`,
+      fix:`別のサービスへ乗り換える前に、無料Zoom勉強会で、現在の2つの手段それぞれについて「見られる」「連絡する」「会う約束をする」のどこで止まるかを確認します。`,
+      avoid:`成果が出ない理由を年齢や容姿だけに決めたり、原因が分からないまま課金・利用回数・利用サービスだけを増やしたりしないことです。`,
+      zoom:`無料Zoom勉強会では、現在の出会い手段、希望年代、実際の反応を手段別に分けて確認します。会う前と会った後の停止地点を特定し、いまの努力のどこを見直す必要があるかを個別に整理します。`
+    },
+    diffs:['「合わないだけ」と断定 → 会う前後の停止地点を仮説化','努力を褒めて結果を約束 → 4つの未確認要因を明示','やり方を変えさせる → まず手段別の停止地点を確認','原因をやり方だけに限定 → 年齢決めつけと無計画な追加を防ぐ','有利な手段を一方的に提示 → 現在の反応を個別に切り分け']
+  },
+  {
+    id:'1-C',cat:'出会い',type:'過去の成功パターン継続タイプ',coverage:'不足あり（13件）',
+    hypothesis:'過去に通用した自己流を、現在の年代差・目標へ更新できていない可能性',
+    facts:['60代','好みは20代','Q5：6人～10人','Q7：今は特にやっていない','Q8：月0人'],
+    unresolved:'過去の方法のうち残す点と変える点',
+    refs:['_rp7_e2laco_0001','_Zfn5Sg6gQY_0009','GP79B83WXC8_0003'],
+    fixed:{
+      stuck:`あなたは、モテていた頃のやり方を、まだ今の年代向けに更新していないだけです。`,
+      reason:`あなたには、女性と出会えてきた実績があります。恋愛の土台がすでにある人です。それでも今出会えていないのは、あなたの魅力が落ちたからではなく、当時うまくいったやり方が、今の自分の年代と、狙う女性の年代に合わなくなっているだけである可能性が高いです。`,
+      fix:`あなたに必要なのは、今のあなたにあった出会い方が何かを知ることです。ベストな出会い方はあなたの年代と狙う女性の年代によって変わります。`,
+      avoid:`あなたがやってはいけないことは、「歳をとったからモテなくなった」と思い込むことです。自分の年代と、狙う女性の年代が変われば、ベストな出会い方が変わって当然です。`,
+      zoom:`若い頃に恋愛がうまくいっていた人ほど、同じやり方を続けて止まります。無料Zoom勉強会では、60代になったあなたが20代の女性を狙うなら、出会い方をどう変えるべきなのか、その考え方をお伝えします。昔のやり方のうち、何が今も使えて、何がもう通用しないのかもわかります。`
+    },
+    ai:{
+      stuck:`「過去に6人～10人と深い関係になった経験がある」一方で、「現在は出会いの行動なし」「新規女性は月0人」という回答です。経験不足ではなく、過去の方法を現在の生活と希望年代へどうつなぐかで止まっている可能性があります。`,
+      reason:`Waka恋愛ナレッジには、本人と相手の年代や目標が変われば、以前の成功方法が同じようには働かない場合があるという見解があります。ただし、過去の出会い方、当時うまくいった場面、現在動いていない理由が未回答のため、何を残し何を変えるかは確定できません。`,
+      fix:`無料Zoom勉強会で、過去にうまくいった出会い方・会話・関係の進み方を一度整理します。現在の生活で再利用できる点と、20代女性との関係希望に合わせて確認が必要な点を分けます。`,
+      avoid:`昔の成功をそのまま繰り返すことと、逆に「60代だから無理」と経験まで全否定することです。過去の方法を試し直す前に、現在との違いを確認します。`,
+      zoom:`無料Zoom勉強会では、過去の成功場面と現在の生活・希望条件を並べて比較します。残せる強み、更新が必要な入口、今動けていない理由を確認し、最初に見直す一点を一緒に絞ります。`
+    },
+    diffs:['「更新していないだけ」と断定 → 過去実績と現在0人を結び仮説化','魅力は落ちていないと慰める → 過去場面などの不足を明示','ベストな方法を知る → 過去の何を残すかZoomで棚卸し','年齢原因だけを否定 → 反復と全否定の両極端を防ぐ','一般的な年代論 → 過去と現在の実場面を比較']
+  },
+  {
+    id:'2-A',cat:'会話',type:'会話の入口で緊張しやすいタイプ',coverage:'概ね充足（31件）',
+    hypothesis:'会話力全般より、最初の数分の流れと反応確認が定まっていない可能性',
+    facts:['50代','好みは20代','Q8：月1人～5人','Q13：緊張で頭が真っ白','Q15：緊張で頭が真っ白','Q16：反応が分からない'],
+    unresolved:'緊張が始まる具体的瞬間・相手の反応・その直前の言葉',
+    refs:['hfHM1Ruxa1c_0004','8EQ1xCGm8TY_0005','1kQugCnfcfM_0009'],
+    fixed:{
+      stuck:`あなたはまだ、初対面の女性と距離を縮める「会話の流れ」を知らないだけです。`,
+      reason:`あなたは、女性と会うところまでは自力で進めています。ここまで来られずに止まる男性も多い中、その行動力は立派な強みです。止まっているのは会話だけです。緊張したり、何を話したらいいのか迷ったりするのは、性格のせいではなく、距離を縮める会話の流れをまだ知らないからである可能性が高いです。`,
+      fix:`あなたがやることは、初対面の女性との、「正しい会話の流れ」を学ぶことです。初対面の女性との会話で大切なのは、面白い話をすることではありません。適切な会話の流れによって、スムーズに女性との距離を縮めることができるようになることです。`,
+      avoid:`女性向けの会話ネタを覚えようとしたり、女性の本音を知ろうとすることです。女性に合わせようとすればするほど、恋愛はうまくいかなくなります。`,
+      zoom:`会話が苦手な人ほど「会話ネタ」を増やそうとしますが、学ぶべきはネタではなく、距離を縮める会話の流れです。無料Zoom勉強会では、なぜ楽しい雑談だけでは20代の女性との距離が縮まらないのか、距離が縮まる会話と何が違うのかを、実例をまじえてお伝えします。自分の会話に何が欠けていたのか、はっきりわかるはずです。`
+    },
+    ai:{
+      stuck:`新規女性とは月1人～5人会えている一方、「最初の話題で頭が真っ白」「会話中も緊張」「相手の反応が分からない」と回答しています。会話力全体ではなく、第一声から最初の数分の流れで止まっている可能性があります。`,
+      reason:`ナレッジ内では、話題を多く知ることと、初対面で流れを作ることは別だという見解があります。今回の回答は緊張が入口と会話中の両方に出ていますが、緊張が第一声の前か、返答後か、沈黙の時かは分からず、性格だけを原因にはできません。`,
+      fix:`会話文を暗記して試す前に、無料Zoom勉強会で、実際の第一声と相手の返答、その直後に言葉が止まるところまでを再現します。最初に直す一点を、その場面から絞ります。`,
+      avoid:`会話ネタを大量に覚えること、無理に面白い人を演じること、緊張を性格の弱さだと決めることです。反応が分からないまま会話を押し通さないようにします。`,
+      zoom:`無料Zoom勉強会では、緊張が始まる瞬間、直前に言った言葉、相手の返答、沈黙までの流れを確認します。話題不足・返答の受け方・反応確認のどこが入口を止めているかを個別に整理します。`
+    },
+    diffs:['「流れを知らないだけ」と断定 → 緊張が出る3回答から入口を仮説化','行動力を褒める → 緊張の位置が未確認だと明示','正しい会話を学ばせる → 第一声をZoomで再現','本音を知ることまで否定 → 暗記・演技・押し通しを具体的に禁止','一般的な会話講義 → 緊張が始まる瞬間を個別確認']
+  },
+  {
+    id:'2-B',cat:'会話',type:'雑談止まりタイプ',coverage:'不足あり（31件）',
+    hypothesis:'会話は成立しても、情報交換・無難な雑談から関係が動く会話へ切り替わっていない可能性',
+    facts:['50代','好みは20代','Q8：月1人～5人','Q9：月0人','Q13：自己紹介','Q14：自己紹介','Q16：一応やり取り'],
+    unresolved:'実際の会話が情報交換で止まった箇所と別れ際の流れ',
+    refs:['uKPftTzfbZg_0005','7X3vtbGKlSA_0001','f2LrTtpwuqo_0004'],
+    fixed:{
+      stuck:`あなたに足りないのは、盛り上げる会話ではなく、女性を「惚れさせる会話」だけです。`,
+      reason:`あなたには、初対面の女性と会話をして、場を盛り上げる力があります。これは大きな武器です。ただ、「盛り上がる会話」と「女性が惚れる会話」は別物です。自分の話や仕事の話で楽しませても、女性側の気持ちの距離は縮まっていない可能性が高いです。`,
+      fix:`あなたが最初にやることは、女性を惚れさせる会話テクニックを学ぶことです。ウンチク話や、仕事の話は、表面上は「すごいですね」と言われても、恋愛感情にはつながっていません。`,
+      avoid:`2回目につながらないことを、自分の容姿やスペックのせいにしたり、相手のせいにしたりしないことです。男性のスペックや容姿は、若くて美人な女性ほど気にしていません。`,
+      zoom:`2回目につながるかどうかは、別れ際に約束したかどうかではなく、会話中にどれだけ女性を惚れさせたかで決まっています。無料Zoom勉強会では、出会ってから別れるまでの間に女性の中で何が起きているのか、どの段階で惚れさせる仕掛けが必要なのかをお伝えします。20代の女性となぜ2回目につながらなかったのか、腑に落ちるはずです。`
+    },
+    ai:{
+      stuck:`「新規女性とは月1人～5人会える」「深い関係は月0人」「最初と帰り際が自己紹介」「相手は一応やり取りしている」という回答から、会話を成立させることはできても、情報交換から関係が動く会話へ切り替える場面で止まっている可能性があります。`,
+      reason:`ナレッジ内では、仕事・経歴・自己紹介などの情報交換は会話を続けやすい一方、相づちだけでは恋愛感情まで判断できないという見解があります。今回はQ16も「一応やり取りしている反応」のため、実際の言葉・順番・別れ際を確認しないと原因は確定できません。`,
+      fix:`新しい会話ネタを自己流で試す前に、無料Zoom勉強会で、最初の話題から別れ際までを再現します。どこから情報交換になり、どの瞬間に反応が止まったのかを確認して、最初に変える一点を絞ります。`,
+      avoid:`話題や質問の数だけを増やしたり、仕事の知識や経歴を詳しく伝えたりして、会話を盛り上げようとすることです。また、笑顔や相づちだけで好意があると決めつけ、相手の反応を確認せず関係を進めないでください。`,
+      zoom:`無料Zoom勉強会では、実際に使った話題、相手の反応が変わった瞬間、帰り際の会話、次の約束につながらなかった場面を確認します。「話題」「聞き方」「会話を切り替える位置」のどこが影響しているかを個別に切り分けます。`
+    },
+    diffs:['「惚れさせる会話だけ」と断定 → 5つの回答で停止場面を具体化','会話力を褒め相手の感情を推測 → 発信者見解と未確認情報を分離','会話テクニックを学ばせる → 実際の会話をZoomで再現','女性全体の価値観を断定 → 禁止行動を回答範囲に限定','惚れさせる仕掛け → 話題・聞き方・切替位置を個別確認']
+  },
+  {
+    id:'2-C',cat:'会話',type:'相手の反応読み違いタイプ',coverage:'不足あり（26件）',
+    hypothesis:'表面的な愛想と関係が進む反応を、一定の基準で区別できていない可能性',
+    facts:['40代','好みは20代','Q8：月1人～5人','Q14：今後のこと','Q15：一方的に話す','Q16：毎回反応が違う'],
+    unresolved:'好意と判断した具体的反応、その後の行動、読み違いが起きた場面',
+    refs:['dZlYWV5-zkE_0004','mpVBCDaW_aU_0001','xa19dk1sedA_0001'],
+    fixed:{
+      stuck:`あなたに今必要なのは、女性心理を学ぶことです。`,
+      reason:`あなたは、女性と出会える行動力や、女性と会話をするコミュニケーション能力は十分にあるようです。しかし、女性があなたとまた会いたいと思うかどうかは、その場の楽しさではなく、どれだけ距離を縮められたか（どれだけあなたに惚れたか）です。`,
+      fix:`あなたがまずやるべきことは、女性の本音と本能の違いや、その違いが行動や言葉にどう表れるかを学ぶことです。`,
+      avoid:`会話中に女性が笑っていたり、あなたを褒めたりしたとしても、それだけで「好意を持たれた」と受け取らないこと。本当にあなたに好意を持った女性は、もっと違う反応をします。`,
+      zoom:`女性の表面的な態度を真に受けているうちは、恋愛はうまくいきません。無料Zoom勉強会では、女性の本音と本能がどう違い、脈のあるとき・ないときで反応がどう変わるのかを、実例をまじえてお伝えします。20代の女性の「本当の脈あり」の見方が変わるはずです。`
+    },
+    ai:{
+      stuck:`「新規女性とは月1人～5人会える」「一方的に話す」「女性の反応は毎回違う」という回答から、会話の有無ではなく、相手の反応を見て話し方を変える基準が定まっていない可能性があります。`,
+      reason:`ナレッジ内では、笑顔や相づちなど一つの反応だけで好意を判断せず、その前後の会話や次の行動も含めて見る必要があるという見解があります。今回は反応が毎回違うため、どの反応を好意と考え、その後どう動いたかを確認しないと読み違いの位置は分かりません。`,
+      fix:`無料Zoom勉強会で、最近の一場面を選び、あなたが話した内容、相手の表情や返答、その後に取った行動を順番に確認します。まず、どの反応を判断材料にしているかを言語化します。`,
+      avoid:`笑顔、視線、褒め言葉など一つのサインだけで脈あり・脈なしを断定することです。反応が違うのに、同じ話し方を一方的に続けることも避けます。`,
+      zoom:`無料Zoom勉強会では、好意だと思った反応、直前の会話、あなたが次にしたこと、その後の結果を具体例で確認します。表面的な愛想と関係が進む反応を、単一サインではなく流れで区別できるよう整理します。`
+    },
+    diffs:['「女性心理が必要」と抽象化 → 一方的な会話と反応のばらつきを特定','能力を褒めて惚れたかを推測 → 反応前後の不足情報を明示','本音と本能を学ばせる → 直近の一場面をZoomで検証','別の反応があると断定 → 単一サインでの判断を禁止','表面的態度を責める → 判断した流れを具体例で確認']
+  },
+  {
+    id:'3-A',cat:'距離の縮め方',type:'会話の数で勝負タイプ',coverage:'不足あり（11件）',
+    hypothesis:'会話の回数を増やしても、同意を前提に距離を縮める判断基準が未確定の可能性',
+    facts:['50代','好みは20代','Q8：月1人～5人','Q16：興味深そう','Q17：あまり得意ではない','Q18：わからない','Q19：経験なし'],
+    unresolved:'相手の同意をどう確認したか、距離を縮める前後の会話と反応',
+    refs:['g3okzkS3NXk_0002','_rp7_e2laco_0001','fo_V4Dv8szI_0000'],
+    fixed:{
+      stuck:`あなたはまだ、正しいスキンシップの順番を知らないだけです。`,
+      reason:`あなたは、女性と出会って、会話するところまではできています。スキンシップに踏み出せていないのは、女性を大切にしたい、紳士的な気持ちの表れでもあります。ただ、スキンシップなしで女性との距離を縮めようとするのは、とても難しいことです。`,
+      fix:`あなたが最初にやることは、正しいスキンシップの順番と、正しいタイミングを学ぶことです。スキンシップを使わないと、恋愛の難易度が跳ね上がります。一方で、スキンシップは適当にやっては効果がないばかりか逆効果になりかねません。適切なタイミングで、適切な順番でスキンシップをするからこそ、絶大な効果が得られます。`,
+      avoid:`自己流でスキンシップをすること。スキンシップは劇薬です。自己流でやるのはトラブルの元です。かならず、正しい順番とタイミングを学んでください。`,
+      zoom:`スキンシップは、やみくもに始めると逆効果になる劇薬です。無料Zoom勉強会では、なぜスキンシップなしでは20代の女性との関係が進まないのか、そして「正しい順番」から始めるとなぜ嫌がられないのか、その仕組みをお伝えします。自分が何から身につければいいのか、はっきりします。`
+    },
+    ai:{
+      stuck:`「相手の反応は興味深そう」でも、「スキンシップはあまり得意ではない」「最初にどこからか分からない」「経験なし」と回答しています。会話の先で、相手の同意と境界線を確認する判断基準が未確定な段階です。`,
+      reason:`ナレッジ内では、会話が続くことと、身体的な距離を進めてよいことは別に確認する必要があるという見解があります。興味深そうな反応だけでは同意になりません。未経験の今回は、具体的な行動より先に、同意・拒否・停止の基準を確認する必要があります。`,
+      fix:`自己流で触れる前に、無料Zoom勉強会で、明確な同意とは何か、迷いがある反応をどう扱うか、どの反応なら止めるべきかを確認します。実践手順ではなく、安全な判断基準を先に整理します。`,
+      avoid:`会話が盛り上がったことを同意だと考えて触れることや、分からないまま相手で試すことです。拒否・回避・嫌そうな反応、不明確な同意があれば必ず止めます。`,
+      zoom:`無料Zoom勉強会では、距離を縮める前の会話、同意の確認方法、境界線、停止サインを具体例で確認します。選択式診断だけでは分からない不安や場面を聞き、安全面を優先して最初の確認点を絞ります。`
+    },
+    diffs:['「順番を知らないだけ」と断定 → 未経験と同意判断を分ける','紳士的だと褒める → 興味反応は同意でないと明示','触れ方を学ばせる → 安全な判断基準をZoomで先に確認','劇薬という不安訴求 → 具体的な停止条件を提示','正しい順番なら嫌がられない → 成果保証せず同意・境界線を確認']
+  },
+  {
+    id:'3-B',cat:'距離の縮め方',type:'自己流スキンシップタイプ',coverage:'不足あり（18件）',
+    hypothesis:'距離を縮める順番・タイミング・同意確認が相手の反応とずれている可能性',
+    facts:['50代','好みは20代','Q8：月6人～10人','Q16：興味深そう','Q17：得意','Q18：最初にキス','Q19：身体をよけられる'],
+    unresolved:'拒否直前の会話・距離・言葉、拒否後に止めたか',
+    refs:['_rp7_e2laco_0001','g3okzkS3NXk_0002','tjBvIeQB8tU_0004'],
+    fixed:{
+      stuck:`あなたは、スキンシップの「順番」と「タイミング」だけがずれています。`,
+      reason:`あなたには、スキンシップに踏み出せる行動力があります。これは大きな強みです。反応が悪いのは、あなたの年齢のせいでも、相性のせいでもありません。嫌がられたのは、触れた順番とタイミングです。順番とタイミングは、教わらない限り自分では身につけにくい部分です。同じ相手でも、順番とタイミングが変われば反応は変わります。`,
+      fix:`正しいスキンシップの順番とタイミングを学ぶことです。やめることではありません。嫌がられたのは、あなたが触れたこと自体ではなく、触れた順番です。順番が変われば、同じ相手でも反応は変わります。`,
+      avoid:`今までのやり方で無理に続けること。そして、反応が悪かったからとスキンシップを一切やめてしまうこと。やめてしまえば、関係はそこで止まります。直すのは順番とタイミングだけです。`,
+      zoom:`嫌がられた原因は、触れたこと自体ではなく、順番とタイミングにあります。無料Zoom勉強会では、女性が受け入れるスキンシップと嫌がるスキンシップの違いがどこにあるのか、その仕組みを実例をまじえてお伝えします。20代の女性に対して、これまで自分がどこで間違えていたのか、その場で特定できるはずです。`
+    },
+    ai:{
+      stuck:`会話中は「興味深そうな反応」でも、「最初にキス」「その後、身体をよけられた」という回答です。身体をよける反応は、その場で継続せず停止すべきサインです。順番だけでなく、同意確認の段階でずれた可能性があります。`,
+      reason:`ナレッジ内でも、距離を縮める場面では相手の反応確認が前提とされています。ただし、会話中の好反応はキスへの同意を意味しません。今回の選択回答だけでは、直前の言葉、距離、同意確認、よけられた後に止めたかが分からないため、原因を順番だけとは断定できません。`,
+      fix:`同じ行動を試し直さず、無料Zoom勉強会で、拒否直前の会話・位置・言葉・同意確認と、拒否後の対応を安全最優先で振り返ります。まず再発を防ぐ停止基準を確認します。`,
+      avoid:`身体をよけられた後に続けること、説得すること、別の触れ方へ切り替えることです。拒否は攻略対象ではありません。明確な同意がない限り、同じ相手でも別の相手でも試しません。`,
+      zoom:`無料Zoom勉強会では、会話の好反応と身体的な同意を分けて考え、拒否直前から直後までを確認します。どの段階で止めるべきだったか、同じ状況を繰り返さないために何を確認するかを整理します。`
+    },
+    diffs:['「順番だけ」と断定 → 身体をよける反応を最優先の停止サインに','行動力を褒め反応変化を約束 → 会話の好反応は同意でないと明示','やめずに順番を学ばせる → 試し直さず安全確認','続けるか全廃かの二択 → 拒否後の継続・説得・切替を禁止','受け入れさせる仕組み → 拒否前後を確認し再発防止']
+  },
+  {
+    id:'3-C',cat:'距離の縮め方',type:'安心感はあるが進展しにくいタイプ',coverage:'不足あり（24件）',
+    hypothesis:'安心感や会話は成立しても、恋愛として関係が動く切り替えが不足している可能性',
+    facts:['40代','好みは20代','Q8：月1人～5人','Q9：月0人','Q10：3回以上','Q16：相手からスキンシップ','Q19：もっとしてほしそう'],
+    unresolved:'いい人で終わった具体的場面、別れ際、次の約束、相手の反応',
+    refs:['xa19dk1sedA_0000','pdk5etgvtqI_0000','DflK6ddGPEY_0006'],
+    fixed:{
+      stuck:`あなたに足りないのは、たった1つ、「Sっ気」だけです。`,
+      reason:`出会えている。会話も続いている。触れても嫌がられていない。恋愛に必要な力は、すでにほとんど揃っています。それでも女性と深い関係になれないのは、あなたのSっ気が足りていない可能性が高いです。女性は、どんなに優しくて魅力がある男性でも、Sっ気がないと魅力を感じずに「いい人」認定してしまいます。`,
+      fix:`Sっ気とは何か？どうやったらSっ気を出せるのか？どんなタイミングで、どのくらいSっ気を出せばいいのかを学ぶことです。`,
+      avoid:`もっと優しくしよう、もっと女性の期待に応えようとすること。それをしても余計に「いい人」扱いされるだけで、恋愛対象からは外れていきます。`,
+      zoom:`Sっ気は、日本人男性に最も足りていない恋愛の要素です。しかも、言葉で説明しきれるものではありません。何を話すかではなく、雰囲気が大事だからです。無料Zoom勉強会では、20代の女性に刺さるSっ気とは何かを、実際の雰囲気ごと体感してもらいます。「いい人止まり」から抜け出す道筋が見えるはずです。`
+    },
+    ai:{
+      stuck:`「新規女性とは月1人～5人会える」「深い関係は月0人」「関係が進むまで3回以上」「相手からスキンシップがある」という回答から、出会い・会話・距離の入口より、安心感のある関係を恋愛として進める最後の切り替えで止まっている可能性があります。`,
+      reason:`ナレッジには、会話や反応が悪くなくても、安心感と恋愛として関係が進むことは別に確認する必要があるという見解があります。ただし、「相手からスキンシップがある」「もっとしてほしそう」という選択回答だけでは、実際の同意、別れ際、次の約束、連絡の変化までは分からず、原因をSっ気だけとは断定できません。`,
+      fix:`強さやSっ気を自己流で足す前に、無料Zoom勉強会で、最後に会った場面の会話、相手の反応、別れ際、次の約束までを順番に確認します。その中から関係が止まった一点を絞ります。`,
+      avoid:`好かれようとして一方的に合わせ続けることも、反対に急に強引になることも避けてください。スキンシップは明確な同意が前提です。拒否・回避・嫌そうな反応や不明確な同意があれば、その場で止めます。`,
+      zoom:`無料Zoom勉強会では、最後に会った場面、スキンシップ前後の反応、別れ際、次の約束、連絡の変化を確認します。そのうえで、会話・距離の進め方・相手の反応判断のどこで止まったのかを個別に整理します。診断だけでは、この切り分けまではできません。`
+    },
+    diffs:['原因を「Sっ気」一つに限定 → 4つの回答から最後の切替を仮説化','女性一般の反応を断定 → 同意・別れ際など不足情報を明示','Sっ気の実践を前提化 → 最後の場面をZoomで確認','優しさを否定 → 過剰迎合と強引さの双方を防ぐ','Sっ気の体感へ誘導 → 反応・約束・連絡を個別に切り分け']
+  },
+  {
+    id:'4-A',cat:'成功目前',type:'誠実さ一本足タイプ',coverage:'充足（241件）',
+    hypothesis:'成果はあるが、本命ほど褒める・合わせる・条件を示す行動が増え、自然な主導性を失う可能性',
+    facts:['50代','好みは20代','Q5：11人以上','Q8：月6人～10人','Q9：月1人～5人','Q20：若い・好み・容姿の良い女性で不調'],
+    unresolved:'うまくいった相手と本命女性の前で変わる言動',
+    refs:['8EQ1xCGm8TY_0002','7X3vtbGKlSA_0001','vdJ29h3oC2A_0003'],
+    fixed:{
+      stuck:`あなたの誠実系（一般的なやり方）は、若い美女が相手のときだけ、通用しなくなります。`,
+      reason:`あなたには、女性と深い関係になる力がすでにあります。ここまで到達している男性はごく一部です。ただ、うまくいくのは同年代の女性が中心で、本当に好みの若い女性・ルックスの良い女性が相手になると、途端にうまくいかなくなっていないでしょうか？そうなってしまうのは、あなたの恋愛手法が誠実系だからである可能性が高いです。決してあなた自身のルックスや、スペックの問題ではありません。`,
+      fix:`あなたが最初にやることは、これまでのやり方（誠実系）を卒業して、非誠実系の恋愛テクニックを学ぶことです。`,
+      avoid:`スペックを上げようとしたり、若い女性に受けそうなファッションをしたり、若い女性の話題に合わせようとすることです。そうした「女性に合わせにいく」姿勢は、かえって若い女性から格下に見られて、恋愛がうまくいかなくなります。`,
+      zoom:`誠実なアプローチは、同年代には通用しても、若い美女には通用しません。無料Zoom勉強会では、その理由と、脳科学とNLPをもとに女性の本能を揺らす「非誠実系」とは何かをお伝えします。20代の美女を落とすために何を身につければいいのか、その地図が手に入ります。`
+    },
+    ai:{
+      stuck:`「新規女性とは月6人～10人会える」「深い関係は月1人～5人」と成果はある一方、「好み・若い・ルックスの良い女性ではうまくいかない」と回答しています。本命を前にした時だけ言動が変わる場面で止まる可能性があります。`,
+      reason:`ナレッジ内には、本命ほど褒める・相手に合わせる・条件を良く見せる行動が増え、普段の会話との差が出る場合があるという見解があります。ただし、今回の回答だけでは、成功した相手と本命の前で会話・予定・支払い・連絡がどう変わったかは分かりません。`,
+      fix:`「誠実さ」を捨てたり新しいテクニックを試したりする前に、無料Zoom勉強会で、うまくいった相手と本命女性の場面を比較します。まず、無意識に増えている言動があるかを確認します。`,
+      avoid:`年収・肩書き・高い店・服装などの条件をさらに足すことと、反対に誠実さ自体を悪いものとして捨てることです。相手を格付けしたり操作したりする方法へ寄せません。`,
+      zoom:`無料Zoom勉強会では、うまくいった相手と本命女性について、褒め方、予定の決め方、支払い、連絡、会話量を比較します。誠実さが過度な迎合へ変わる境目があるかを、実際の場面から整理します。`
+    },
+    diffs:['誠実系が通用しないと断定 → 成功時と本命時の言動差を仮説化','少数の成功者と褒める → 未確認の行動差を明示','非誠実系を学ばせる → 誠実さを捨てず実場面を比較','格下という表現 → 条件追加・誠実さ全否定・操作を禁止','女性の本能を揺らす → 会話・予定・支払い・連絡を個別確認']
+  },
+  {
+    id:'4-B',cat:'成功目前',type:'条件アピール先行タイプ',coverage:'概ね充足（65件）',
+    hypothesis:'関係開始後に連絡・出費・条件提示が増え、関係維持のバランスが変わる可能性',
+    facts:['40代','好みは20代','Q5：11人以上','Q8：月6人～10人','Q9：月1人～5人','Q20：ワンナイト後に関係が続かない'],
+    unresolved:'関係前後で変化した連絡・予定・出費・会話',
+    refs:['pdk5etgvtqI_0001','Ykt0md0XRjM_0004','DflK6ddGPEY_0006'],
+    fixed:{
+      stuck:`あなたに足りないのは、魅力ではなく、女性との関係の「主導権」だけです。`,
+      reason:`あなたには、理想の女性と深い関係になる力がすでにあります。これは誰にでもできることではありません。深い関係になれるのに続かないのは、あなたの魅力（スペック、容姿）が足りないからではなく、関係の主導権を握れていないからである可能性が高いです。つまり、その女性にとっての格上の立場に、まだなれていないということです。`,
+      fix:`あなたがやるべきことは、女性との関係の主導権を握るための「非誠実系」の会話テクニックを学ぶことです。女性にとっての格上の存在となり、主導権を握ることができれば、女性と関係を続けるのは容易になります。`,
+      avoid:`今まで以上にスペックを上げようとしたり、見た目、ファッションを改善しようとすることです。関係が続かないのは、あなたに魅力がないからでも、その女性との相性が悪いからでもありません。`,
+      zoom:`関係が続かないのは魅力の問題ではなく、主導権の問題です。無料Zoom勉強会では、なぜ尽くすほど女性が離れていくのか、主導権を握っている男性は何が違うのかを、実例をまじえてお伝えします。20代の女性との関係を続けるために何を変えればいいのか、はっきりわかるはずです。`
+    },
+    ai:{
+      stuck:`「新規女性とは月6人～10人会える」「深い関係は月1人～5人」と関係開始までは進めています。一方で「ワンナイト後に関係が続かない」という回答から、関係前後で連絡・予定・出費・会話のバランスが変わる地点で止まっている可能性があります。`,
+      reason:`ナレッジ内には、関係開始後に尽くす量や連絡、条件提示が増えると、それまでとの関係性が変わる場合があるという見解があります。ただし、回答だけでは、相手が離れた時期、連絡頻度、予定の決め方、出費、会話の変化が分からず、「主導権」だけを原因にはできません。`,
+      fix:`相手をコントロールする方法を試す前に、無料Zoom勉強会で、関係前と関係後の連絡・予定・出費・会話を時系列で並べます。変化が始まった地点を最初に確認します。`,
+      avoid:`連絡を意図的に無視して相手を不安にさせること、相手を拘束すること、高価な贈り物や条件をさらに増やすことです。関係維持を駆け引きや支配で解決しません。`,
+      zoom:`無料Zoom勉強会では、関係が始まる前後で、連絡頻度、次の予定、支払い、会話、相手の反応がどう変わったかを確認します。続かなくなる分岐点を個別に整理し、最初に見直す一点を絞ります。`
+    },
+    diffs:['不足を「主導権だけ」に限定 → 関係前後の変化地点を仮説化','格上になれていないと断定 → 5つの不足情報を明示','格上になるテクニック → 関係前後を時系列で比較','相性まで否定 → 無視・拘束・贈り物増加を具体的に禁止','主導権の講義 → 続かなくなる分岐点を個別確認']
+  }];
+
+  const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  function resultScreen(d,side){
+    const isAI=side==='ai';
+    const items=LABELS.map((label,i)=>`<section class="result-item">
+      <div class="result-item-head"><span class="result-item-no">${i+1}</span><h3>${esc(label)}</h3></div>
+      <p>${esc(d[side][KEYS[i]])}</p>
+      ${isAI?`<div class="result-diff"><strong>固定回答との違い</strong>${esc(d.diffs[i])}</div>`:''}
+    </section>`).join('');
+    return `<section class="result-screen ${isAI?'ai-screen':'fixed-screen'}">
+      <div class="screen-heading">
+        <div class="screen-title"><span>${isAI?'ナレッジを使ったAI回答例':'元々の固定回答'}</span><span class="screen-badge">${isAI?'AI SAMPLE':'FIXED'}</span></div>
+        <p class="screen-note">${isAI?'回答内容と未確認点を踏まえ、Zoomでの個別確認へつなぐ結果画面':'診断タイプごとに、全員へ同じ文章を表示する従来の結果画面'}</p>
+      </div>
+      <div class="screen-body">${items}</div>
+    </section>`;
+  }
+
+  function panel(d){
+    const cat=CATS[d.cat];
+    return `<article class="type-panel cat-${cat.key}" id="panel-${d.id}">
+      <div class="type-hero">
+        <div class="type-topline"><span class="pill" style="color:${cat.color}">${esc(d.cat)}</span><span class="pill coverage">${esc(d.coverage)}</span></div>
+        <h2>${esc(d.id)}｜${esc(d.type)}</h2>
+        <p class="hypothesis">AIの診断仮説：${esc(d.hypothesis)}</p>
+        <div class="facts">${d.facts.map(x=>`<span class="fact">${esc(x)}</span>`).join('')}</div>
+        <div class="meta-line">
+          <div class="meta-box"><strong>診断だけでは判断できないこと</strong>${esc(d.unresolved)}</div>
+          <div class="meta-box"><strong>参照ナレッジ例</strong>${d.refs.map(esc).join(' ／ ')}</div>
+        </div>
+      </div>
+      <div class="comparisons"><div class="result-columns">${resultScreen(d,'fixed')}${resultScreen(d,'ai')}</div></div>
+    </article>`;
+  }
+
+  document.getElementById('panels').innerHTML=DATA.map(panel).join('');
+
+  function syncPairHeights(panel){
+    const fixedHeading=panel.querySelector('.fixed-screen .screen-heading');
+    const aiHeading=panel.querySelector('.ai-screen .screen-heading');
+    const fixedItems=[...panel.querySelectorAll('.fixed-screen .result-item')];
+    const aiItems=[...panel.querySelectorAll('.ai-screen .result-item')];
+    const targets=[fixedHeading,aiHeading,...fixedItems,...aiItems].filter(Boolean);
+
+    targets.forEach(el=>el.style.minHeight='');
+    if(matchMedia('(max-width:720px)').matches)return;
+
+    if(fixedHeading&&aiHeading){
+      const headingHeight=Math.ceil(Math.max(fixedHeading.getBoundingClientRect().height,aiHeading.getBoundingClientRect().height));
+      fixedHeading.style.minHeight=`${headingHeight}px`;
+      aiHeading.style.minHeight=`${headingHeight}px`;
+    }
+
+    fixedItems.forEach((fixedItem,i)=>{
+      const aiItem=aiItems[i];
+      if(!aiItem)return;
+      const itemHeight=Math.ceil(Math.max(fixedItem.getBoundingClientRect().height,aiItem.getBoundingClientRect().height));
+      fixedItem.style.minHeight=`${itemHeight}px`;
+      aiItem.style.minHeight=`${itemHeight}px`;
+    });
+  }
+
+  function syncAllHeights(){document.querySelectorAll('.type-panel').forEach(syncPairHeights)}
+  let syncFrame=0;
+  function scheduleHeightSync(){cancelAnimationFrame(syncFrame);syncFrame=requestAnimationFrame(syncAllHeights)}
+  scheduleHeightSync();
+  addEventListener('resize',scheduleHeightSync);
+  if(document.fonts?.ready)document.fonts.ready.then(scheduleHeightSync);
+  </script>
+</body>
+</html>
