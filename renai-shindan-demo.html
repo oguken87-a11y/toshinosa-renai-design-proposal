@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>デモ版｜年の差恋愛「3つのつまずき診断」</title>
+<style>
+:root{--bg:#f5f3ee;--tx:#122837;--sub:#62717c;--navy:#073c50;--line:#dfe5e8;--card:#fff;--card2:#e9edf0;--gold:#073c50;--gold2:#0861cd;--c-deai:#00877f;--c-kaiwa:#db7900;--c-kyori:#155acb;--c-goal:#805db0;--line-green:#06b94e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.8;min-width:320px}
+button,a,summary,select{-webkit-tap-highlight-color:transparent}
+button,select{font:inherit}
+button,a,summary{touch-action:manipulation}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{outline:3px solid #db7900;outline-offset:5px}
+.local-banner{max-width:560px;margin:22px auto 10px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;color:#697781}
+.local-banner b{letter-spacing:.1em;color:#084759}
+.local-banner span{white-space:nowrap}
+.wrap{max-width:560px;margin:0 auto 20px;background:#fff;border:1px solid #d9e0e2;border-radius:14px;box-shadow:0 8px 30px #173a4910;overflow:hidden}
+.appbar{height:48px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;font-size:11px;letter-spacing:.08em}
+.appbar b{letter-spacing:.18em;font-size:12px}
+.scr{display:none;padding:28px}
+.scr.on{display:block}
+.thanksline{background:var(--navy);border-radius:9px;color:#fff;text-align:center;font-size:17px;font-weight:700;padding:10px 12px;line-height:1.6}
+.thanksline .check{display:inline-grid;place-items:center;width:26px;height:26px;background:#fff;color:var(--navy);border-radius:50%;margin-right:8px;vertical-align:middle}
+h1{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;text-align:center;line-height:1.45;font-weight:800;font-size:43px;margin:25px -8px 22px;letter-spacing:-.05em}
+h1 .hero-subtitle{display:block;font-size:29px;white-space:nowrap;letter-spacing:-.055em}
+h1 em{color:#f24840;font-style:normal;font-size:41px}
+.hero-divider{display:flex;align-items:center;gap:12px;color:var(--navy);font-size:10px;margin:0 0 15px}
+.hero-divider::before,.hero-divider::after{content:"";height:1px;background:#17495a;flex:1}
+.lead{text-align:center;font-size:18px;font-weight:700;line-height:1.8}
+.lead strong{color:var(--c-deai)}
+.journey{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:relative;gap:12px;list-style:none;margin:27px 0 23px;text-align:center}
+.journey li{position:relative;--stage-color:var(--c-deai);--stage-soft:#d6efec;color:var(--stage-color)}
+.journey li:nth-child(2){--stage-color:var(--c-kaiwa);--stage-soft:#ffe6c9}
+.journey li:nth-child(3){--stage-color:var(--c-kyori);--stage-soft:#dce8fc}
+.journey-circle{display:flex;align-items:center;justify-content:center;width:100px;height:100px;max-width:100%;margin:auto;border:2px solid var(--stage-soft);border-radius:50%;background:#fff;position:relative;z-index:1}
+.journey li:not(:last-child)::after{content:"";position:absolute;left:78%;top:49px;width:60%;border-top:3px dotted #a6c2ca}
+.journey-number{display:grid;place-items:center;position:absolute;top:-12px;left:calc(50% - 13px);width:26px;height:26px;border-radius:50%;background:var(--stage-color);color:#fff;font-size:15px;box-shadow:0 2px 4px #0001}
+.journey svg{width:54px;height:54px}
+.journey-label{display:block;margin-top:7px;font-size:16px;font-weight:800;line-height:1.45}
+.quiz-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:24px 0 20px}
+.quiz-meta span{border:1px solid #dce1e3;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 4px;font-size:16px;font-weight:700}
+.quiz-meta svg{width:24px;height:24px;color:var(--c-deai)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;width:100%;border:1px solid #004cae;border-radius:17px;padding:17px 36px;font-size:24px;font-weight:800;color:#fff;background:linear-gradient(#0c65d4,#004ab7);box-shadow:0 5px 0 #063480;text-decoration:none;line-height:1.5}
+.btn::after{content:"";position:absolute;right:23px;width:11px;height:11px;border-top:3px solid;border-right:3px solid;transform:rotate(45deg)}
+.start-btn{background:linear-gradient(#ff5952,#f1322b);border-color:#ec2822;box-shadow:0 5px 0 #bf332b}
+.start-btn small{font-size:16px}
+.btn:hover{filter:brightness(1.04)}
+.btn:active{transform:translateY(2px);box-shadow:0 3px 0 #063480}
+.start-btn:active{box-shadow:0 3px 0 #bf332b}
+.btn:disabled{opacity:.38;cursor:default;filter:none}
+.linesect{margin-top:25px}
+.later-label{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13px;margin-bottom:12px;color:#44545e}
+.later-label::before,.later-label::after{content:"";height:1px;flex:1;background:#c4cbcf}
+.line-btn{display:flex;align-items:center;gap:16px;width:100%;padding:14px 17px;border:1px solid #06b94e;border-radius:13px;background:#fff;color:#00a841;text-align:left}
+.line-icon{display:grid;place-items:center;width:58px;height:58px;flex:none;border-radius:15px;background:#03bd4e;color:#fff;font-size:16px;font-weight:900}
+.line-btn strong{font-size:17px;line-height:1.5;display:block}
+.line-btn small{font-size:11px;color:#415648;display:block;margin-top:4px}
+.local-notice{font-size:13px;background:#eff7fa;border-radius:8px;padding:10px 12px;margin:12px 0 0;color:var(--navy)}
+.local-notice:empty{display:none}
+.privacy{margin:27px -28px -28px;padding:19px 14px;display:flex;justify-content:center;align-items:center;gap:8px;background:#f6f7f7;text-align:center;font-size:12px;color:#526671}
+.privacy svg{width:19px;height:19px;color:var(--navy);flex:none}
+.stage-guide{margin:2px 0 22px;gap:6px;padding-bottom:14px;border-bottom:3px solid #e3e6e8}
+.stage-guide li::after{display:none}
+.stage-guide .journey-circle{width:auto;height:auto;max-width:none;border:0;border-radius:0;background:transparent;gap:6px}
+.stage-guide .journey-number{position:static;flex:none;width:20px;height:20px;font-size:12px;background:transparent;color:inherit;border:1px solid}
+.stage-guide svg{width:27px;height:27px}
+.stage-guide .journey-label{font-size:13px;line-height:1.45;margin-top:6px}
+.stage-guide li{padding:8px 2px;border-radius:10px}
+.stage-guide li.active{background:var(--stage-soft);outline:2px solid var(--stage-color);outline-offset:1px}
+.stage-guide li.active::before{content:"";position:absolute;bottom:-24px;left:calc(50% - 6px);width:12px;height:12px;transform:rotate(45deg);background:var(--stage-color)}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 0 9px}
+.qsec{font-size:11px;color:#6f7f89}
+.qnum{font-size:18px;font-weight:800;color:var(--tx)}
+.bar{height:10px;background:#e7e5e2;border-radius:99px;overflow:hidden;margin:0 0 19px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--q-accent,var(--navy));transition:width .2s}
+.qcat{font-size:12px;border:1px solid;border-radius:99px;padding:3px 12px;display:inline-flex;align-items:center;gap:7px;font-weight:700}
+.category-icon{width:18px;height:18px;flex:none}
+.qtext{font-size:24px;font-weight:800;line-height:1.65;margin:17px 0 9px;overflow-wrap:anywhere}
+.qnote{font-size:12px;color:var(--sub);margin-bottom:22px}
+.opts{display:flex;flex-direction:column;gap:11px;margin:0 0 25px}
+.opt{width:100%;position:relative;display:flex;align-items:center;gap:13px;text-align:left;padding:17px 42px 17px 18px;min-height:74px;border:1.5px solid #cdd3d7;border-radius:13px;background:#fff;color:var(--tx);font-size:18px;font-weight:700;line-height:1.55}
+.opt::before{content:"";height:23px;width:23px;flex:none;border:2px solid #c6cfd4;border-radius:50%;background:#fff}
+.opt.cb::before{border-radius:5px}
+.opt.sel{border-color:var(--q-accent,var(--c-kyori));background:var(--q-soft,#f1f6fe)}
+.opt.sel::before{border:7px solid var(--q-accent,var(--c-kyori))}
+.opt.sel::after{content:"✓";display:grid;place-items:center;position:absolute;right:13px;top:calc(50% - 12px);background:var(--q-accent,var(--c-kyori));color:#fff;width:24px;height:24px;border-radius:50%;font-size:16px}
+.opt:hover{border-color:var(--q-accent,var(--c-kyori))}
+.opt.has-illustration::before,.opt.has-icon::before{display:none}
+.option-icon{width:39px;height:39px;flex:none;padding:7px;border-radius:10px;background:var(--q-soft,#f1f7f9);color:var(--q-accent,var(--navy))}
+.opt.sel .option-icon{background:#fff}
+.option-illustration{display:block;width:62px;height:62px;flex:none;color:var(--q-accent,var(--navy))}
+.opt.has-illustration{min-height:92px;padding:13px 43px 13px 12px;gap:14px}
+@media(max-width:400px){.option-illustration{width:53px;height:53px}.opt.has-illustration{min-height:83px;gap:11px;padding-left:10px}}
+.option-text{flex:1}
+.navrow{display:flex;flex-direction:column-reverse;gap:18px}
+.btn.sub{display:inline-flex;align-self:flex-start;width:auto;background:none;color:var(--c-kyori);border:0;box-shadow:none;font-size:15px;font-weight:600;padding:7px 2px}
+.btn.sub::after{display:none}
+.analyzing{text-align:center;padding:50px 10px}
+.spinner{width:44px;height:44px;border:4px solid #e0eaee;border-top-color:var(--c-deai);border-radius:50%;margin:0 auto 22px;animation:spin .85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.analyzing h2{font-size:22px}.analyzing p{margin-top:14px;color:var(--sub);font-size:14px}
+.resulthead{text-align:center;margin:1px 0 22px}
+.result-heading{display:flex;align-items:center;justify-content:center;gap:16px;margin:4px 0 17px}
+.result-heading h2{font-size:25px;font-weight:800}
+.laurel{width:34px;height:54px;color:#cc870f;flex:none}
+.laurel.right{transform:scaleX(-1)}
+.resultbadge{display:inline-block;color:#fff;border-radius:99px;padding:4px 24px;font-size:18px;font-weight:800;line-height:1.6}
+.resulttype{font-size:30px;line-height:1.5;letter-spacing:-.035em;margin:11px 0 0;font-weight:900}
+.knowledge-note{color:var(--sub);font-size:11px;margin-top:8px;line-height:1.7}
+.result-guide{margin:21px 0 0}
+.result-guide li.active{outline:2px solid var(--stage-color);border-radius:50%;background:#fff}
+.result-guide li.active::before{bottom:auto;top:-12px;background:var(--navy);border-radius:50% 50% 0 50%;width:18px;height:18px;left:calc(50% - 9px)}
+.resultitems{display:flex;flex-direction:column;gap:11px}
+.resultitem{border:1px solid #dfdedd;border-radius:11px;box-shadow:0 2px 5px #20324109;overflow:hidden}
+.item-heading{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center;gap:10px;padding:17px 16px 14px;line-height:1.55}
+.result-symbol{width:36px;height:36px;padding:7px;background:#eaf6f4;color:var(--c-deai);border-radius:10px}
+.resultitem h3{font-size:16px;font-weight:700;line-height:1.65}
+.item-number{display:inline-grid;place-items:center;background:var(--c-deai);color:#fff;border-radius:50%;width:21px;height:21px;font-size:12px;margin-right:7px;vertical-align:middle}
+.is-zoom .result-symbol{color:var(--c-kyori);background:#e3edff}
+.resultitem p{padding:0 16px 19px;font-size:16px;line-height:1.95;white-space:pre-line}
+.resultitem.is-zoom{border:2px solid var(--c-kyori);background:#f4f8ff;margin-top:3px}
+.is-zoom h3{color:#124fad}.is-zoom .item-number{background:var(--c-kyori)}
+.zoomcta{margin-top:27px;text-align:center}
+.zoomcta__lead{font-size:14px;line-height:1.8;color:#475f6c;margin-bottom:14px}
+.zoom-btn{font-size:20px;padding:18px 35px 18px 16px;gap:14px;justify-content:flex-start;text-align:left;line-height:1.5}
+.zoom-btn svg{width:45px;height:45px;padding:9px;border:1px solid #ffffff40;border-radius:11px;flex:none}
+.zoomcta__note{display:block;font-size:11px;color:var(--sub);line-height:1.7;margin-top:13px}
+.retry{display:block;margin:18px auto 0;border:0;background:none;color:var(--sub);font-size:13px;text-decoration:underline;padding:8px}
+.preview-controls{max-width:560px;margin:0 auto 35px;padding:0 12px;color:var(--sub);font-size:12px}
+.preview-controls>summary{cursor:pointer;padding:10px 0}
+.preview-controls-inner{padding:14px;border:1px solid #dbe1e4;border-radius:10px;background:#fff}
+.preview-controls label{display:block}
+.preview-controls select{width:100%;padding:7px;margin:6px 0 10px;border:1px solid #ccd5db;background:#fff;border-radius:6px;color:var(--tx)}
+.preview-links{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.preview-links button{padding:6px 10px;background:#edf3f5;border:1px solid #ccd9df;border-radius:6px;font-size:12px}
+.preview-warning{line-height:1.7;font-size:11px}
+html.f-line .thanksline,html.f-line .linesect{display:none}
+@media(max-width:600px){.local-banner{margin-top:10px}.wrap{margin:0 10px 16px}.scr{padding:23px 20px}.privacy{margin:25px -20px -23px}.appbar{padding:0 20px}.journey-circle{width:89px;height:89px}.journey li:not(:last-child)::after{top:44px}}
+@media(max-width:400px){.scr{padding:21px 16px}.privacy{margin:23px -16px -21px}h1{font-size:36px}.hero-subtitle{font-size:24px!important}h1 em{font-size:34px}.thanksline{font-size:14px}.lead{font-size:16px}.journey{gap:8px}.journey-circle{width:77px;height:77px}.journey svg{width:44px;height:44px}.journey li:not(:last-child)::after{top:38px}.journey-label{font-size:14px}.stage-guide svg{width:26px;height:26px}.stage-guide .journey-circle{width:auto;height:auto}.stage-guide .journey-label{font-size:12px}.quiz-meta span{font-size:13px}.quiz-meta svg{width:21px}.btn{font-size:20px}.qtext{font-size:22px}.opt{font-size:17px;padding-left:14px}.resulttype{font-size:25px}.result-heading h2{font-size:23px}.resultitem h3{font-size:14px}.resultitem p{font-size:15px}.zoom-btn{font-size:17px}.line-btn{gap:11px;padding:11px}.line-btn strong{font-size:15px}}
+@media(max-width:400px){h1 .hero-subtitle{font-size:clamp(19px,6vw,24px)!important}h1 em{font-size:clamp(27px,8.5vw,34px)}.start-btn{font-size:clamp(18px,5.1vw,20px);padding-left:18px;padding-right:30px}.start-btn small{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<!-- 2026-09-02 追加: URLに ?f=line が付いていたら html 要素に f-line クラスを付ける。
+     DOM構築前に走るので、LINE登録セクションが一瞬見えることはない。
+     1行で書いてあるのは build_utage_html.py の IIFE 囲み（"<script>"+改行 が目印）に
+     巻き込まれないようにするため。ここを複数行にしてはいけない。 -->
+<script>try{if(new URLSearchParams(location.search).get('f')==='line')document.documentElement.classList.add('f-line');}catch(e){}</script>
+</head>
+<body>
+
+<div class="local-banner"><b>DESIGN C · デモ版</b><span>本番への送信なし</span></div>
+<main class="wrap">
+  <div class="appbar"><b>WAKA</b><span>年の差恋愛 · 3つのつまずき診断</span></div>
+  <section id="scr-start" class="scr on">
+    <p class="thanksline"><span class="check" aria-hidden="true">✓</span>ご登録ありがとうございます。</p>
+    <h1>年の差恋愛<span class="hero-subtitle">「<em>3つのつまずき</em>診断」</span></h1>
+    <div class="hero-divider" aria-hidden="true">◆</div>
+    <p class="lead">どこで<strong>止まっている</strong>かを診断します</p>
+    <ol  class="journey " aria-label="3つのつまずき"><li data-stage="deai"><div class="journey-circle"><span class="journey-number">1</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="15" cy="13" r="5"/><circle cx="41" cy="13" r="5"/><path d="M8 45V30c0-7 12-8 15-2l5 7 5-7c3-6 15-5 15 2v15M15 29v16m26-16v16M22 29l6 6m6-6-6 6"/></svg></div><span class="journey-label">出会い</span></li><li data-stage="kaiwa"><div class="journey-circle"><span class="journey-number">2</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M29 36c-3 7-13 6-18 9l2-9C2 31 6 12 19 10c13-3 25 5 24 16-1 8-7 12-14 10Z"/><path d="M36 35c4 6 10 5 15 9l-2-9c5-6 3-14-2-18"/><circle cx="17" cy="24" r="1" fill="currentColor"/><circle cx="25" cy="24" r="1" fill="currentColor"/><circle cx="33" cy="24" r="1" fill="currentColor"/></svg></div><span class="journey-label">会話</span></li><li data-stage="kyori"><div class="journey-circle"><span class="journey-number">3</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="5"/><circle cx="45" cy="15" r="5"/><path d="M4 42V31c0-8 14-8 14 0v11M38 42V31c0-8 14-8 14 0v11M11 32v16m34-16v16M22 30h12m-4-4 4 4-4 4"/></svg></div><span class="journey-label">距離の<br>縮め方</span></li></ol>
+    <div class="quiz-meta"><span><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="4" width="18" height="24" rx="3"/><path d="m11 13 3 3 6-7m-9 14h10"/></svg>全21問</span><span><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="12"/><path d="M16 8v9h7"/></svg>約3分</span><span><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 17V6c0-4 6-4 6 0v10l3-2 3 2 3-1v9l-4 6H13L6 21c-2-3 2-6 4-3l3 3"/><path d="M5 9c0-6 4-9 11-9" transform="translate(0 1)"/></svg>選択式</span></div>
+    <button class="btn start-btn" type="button" onclick="startQuiz()">診断をはじめる <small>（無料）</small></button>
+    <div class="linesect">
+      <p class="later-label">あとでやる方はこちら</p>
+      <button class="line-btn" type="button" onclick="previewNotice('start')"><span class="line-icon" aria-hidden="true">LINE</span><span><strong>公式LINEに保存して<br>あとで診断する</strong><small>診断URLをLINEで自分に送れます</small></span></button>
+      <p class="local-notice" id="start-notice" role="status"></p>
+    </div>
+    <p class="privacy"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 2 12 5v9c0 8-8 12-12 14C12 28 4 24 4 16V7Z"/><path d="m10 15 4 4 8-9"/></svg>デモ版の回答は、このページ内だけで扱います</p>
+  </section>
+
+  <section id="scr-q" class="scr" aria-label="診断の質問">
+    <ol id="question-stages" class="journey stage-guide" aria-label="3つのつまずき"><li data-stage="deai"><div class="journey-circle"><span class="journey-number">1</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="15" cy="13" r="5"/><circle cx="41" cy="13" r="5"/><path d="M8 45V30c0-7 12-8 15-2l5 7 5-7c3-6 15-5 15 2v15M15 29v16m26-16v16M22 29l6 6m6-6-6 6"/></svg></div><span class="journey-label">出会い</span></li><li data-stage="kaiwa"><div class="journey-circle"><span class="journey-number">2</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M29 36c-3 7-13 6-18 9l2-9C2 31 6 12 19 10c13-3 25 5 24 16-1 8-7 12-14 10Z"/><path d="M36 35c4 6 10 5 15 9l-2-9c5-6 3-14-2-18"/><circle cx="17" cy="24" r="1" fill="currentColor"/><circle cx="25" cy="24" r="1" fill="currentColor"/><circle cx="33" cy="24" r="1" fill="currentColor"/></svg></div><span class="journey-label">会話</span></li><li data-stage="kyori"><div class="journey-circle"><span class="journey-number">3</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="5"/><circle cx="45" cy="15" r="5"/><path d="M4 42V31c0-8 14-8 14 0v11M38 42V31c0-8 14-8 14 0v11M11 32v16m34-16v16M22 30h12m-4-4 4 4-4 4"/></svg></div><span class="journey-label">距離の<br>縮め方</span></li></ol>
+    <div class="qhead"><span class="qsec" id="qsec"></span><span class="qnum" id="qnum"></span></div>
+    <div class="bar" role="progressbar" id="question-progress" aria-label="回答の進み具合" aria-valuemin="0" aria-valuemax="100"><i id="barfill"></i></div>
+    <div><span class="qcat" id="qcat"></span></div>
+    <p class="qtext" id="qtext"></p>
+    <p class="qnote" id="qnote"></p>
+    <div class="opts" id="opts"></div>
+    <div class="navrow"><button class="btn sub" id="btn-back" type="button" onclick="goBack()">〈 戻る</button><button class="btn" id="btn-next" type="button" onclick="goNext()" disabled>次へ</button></div>
+  </section>
+
+  <section id="scr-analyzing" class="scr" aria-live="polite">
+    <div class="analyzing"><div class="spinner" aria-hidden="true"></div><h2>あなたの回答を照合しています</h2><p>今回の回答の組み合わせを<br>Waka恋愛ナレッジと照らし合わせています。</p></div>
+  </section>
+
+  <section id="scr-result" class="scr">
+    <div class="resulthead">
+      <div class="result-heading"><span class="laurel"><svg viewBox="0 0 34 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M28 60C5 45 6 21 26 3"/><path d="M18 48C3 46 1 39 4 32c8 1 12 6 14 16ZM13 33C0 28 4 18 7 15c7 4 8 10 6 18ZM18 18C10 9 16 3 21 1c4 8 2 12-3 17ZM24 55c7-9 4-16 0-18-6 5-6 10 0 18ZM16 40c7-8 6-14 3-17-6 4-6 10-3 17Z" fill="currentColor" stroke="none"/></svg></span><h2>あなたの診断結果</h2><span class="laurel right"><svg viewBox="0 0 34 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M28 60C5 45 6 21 26 3"/><path d="M18 48C3 46 1 39 4 32c8 1 12 6 14 16ZM13 33C0 28 4 18 7 15c7 4 8 10 6 18ZM18 18C10 9 16 3 21 1c4 8 2 12-3 17ZM24 55c7-9 4-16 0-18-6 5-6 10 0 18ZM16 40c7-8 6-14 3-17-6 4-6 10-3 17Z" fill="currentColor" stroke="none"/></svg></span></div>
+      <span class="resultbadge" id="result-badge"></span><p class="resulttype" id="result-type"></p>
+      <p class="knowledge-note">回答の組み合わせを、Waka恋愛ナレッジに照らし合わせた結果です。</p>
+      <ol id="result-stages" class="journey stage-guide result-guide" aria-label="3つのつまずき"><li data-stage="deai"><div class="journey-circle"><span class="journey-number">1</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="15" cy="13" r="5"/><circle cx="41" cy="13" r="5"/><path d="M8 45V30c0-7 12-8 15-2l5 7 5-7c3-6 15-5 15 2v15M15 29v16m26-16v16M22 29l6 6m6-6-6 6"/></svg></div><span class="journey-label">出会い</span></li><li data-stage="kaiwa"><div class="journey-circle"><span class="journey-number">2</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M29 36c-3 7-13 6-18 9l2-9C2 31 6 12 19 10c13-3 25 5 24 16-1 8-7 12-14 10Z"/><path d="M36 35c4 6 10 5 15 9l-2-9c5-6 3-14-2-18"/><circle cx="17" cy="24" r="1" fill="currentColor"/><circle cx="25" cy="24" r="1" fill="currentColor"/><circle cx="33" cy="24" r="1" fill="currentColor"/></svg></div><span class="journey-label">会話</span></li><li data-stage="kyori"><div class="journey-circle"><span class="journey-number">3</span><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="5"/><circle cx="45" cy="15" r="5"/><path d="M4 42V31c0-8 14-8 14 0v11M38 42V31c0-8 14-8 14 0v11M11 32v16m34-16v16M22 30h12m-4-4 4 4-4 4"/></svg></div><span class="journey-label">距離の<br>縮め方</span></li></ol>
+    </div>
+    <div class="resultitems">
+      <article class="resultitem" aria-labelledby="result-heading-1">
+        <header class="item-heading"><svg class="result-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><h3 id="result-heading-1"><span class="item-number">1</span>あなたが止まっているところ</h3></header>
+        <p id="result-1"></p>
+      </article>
+      <article class="resultitem" aria-labelledby="result-heading-2">
+        <header class="item-heading"><svg class="result-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg><h3 id="result-heading-2"><span class="item-number">2</span>そう判断した理由</h3></header>
+        <p id="result-2"></p>
+      </article>
+      <article class="resultitem" aria-labelledby="result-heading-3">
+        <header class="item-heading"><svg class="result-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m16 8-3 5-5 3 3-5Z"/></svg><h3 id="result-heading-3"><span class="item-number">3</span>最初にやること</h3></header>
+        <p id="result-3"></p>
+      </article>
+      <article class="resultitem" aria-labelledby="result-heading-4">
+        <header class="item-heading"><svg class="result-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5Z"/><path d="M12 7v6m0 4h.01"/></svg><h3 id="result-heading-4"><span class="item-number">4</span>やってはいけないこと</h3></header>
+        <p id="result-4"></p>
+      </article>
+      <article class="resultitem is-zoom" aria-labelledby="result-heading-5">
+        <header class="item-heading"><svg class="result-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="3"/><path d="m15 10 6-4v12l-6-4"/></svg><h3 id="result-heading-5"><span class="item-number">5</span>無料Zoom勉強会でお伝えすること</h3></header>
+        <p id="result-5"></p>
+      </article>
+    </div>
+    <div class="zoomcta">
+      <p class="zoomcta__lead">診断で見えた「つまずき」を、<br>あなたの場合にどう直すか確認しませんか？</p>
+      <a class="btn zoom-btn" id="zoom-btn" href="#" onclick="return onZoomTap()"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="18" rx="4"/><path d="m21 14 9-6v18l-9-6Z"/></svg><span>無料Zoom勉強会の<br>案内を受け取る</span></a>
+      <p class="local-notice" id="result-notice" role="status"></p>
+      <span class="zoomcta__note">回答の背景まで確認したうえでお伝えします。</span>
+    </div>
+    <button class="retry" type="button" onclick="restartQuiz()">もう一度診断する</button>
+  </section>
+</main>
+<details class="preview-controls">
+  <summary>デザイン確認用：質問画面・11タイプの結果を見る</summary>
+  <div class="preview-controls-inner">
+    <div class="preview-links"><button type="button" onclick="showPreviewStart()">スタート画面</button></div>
+    <label for="preview-question">質問を選んで、回答アイコンを確認</label>
+    <select id="preview-question" onchange="if(this.value)showPreviewQuestion(this.value)"><option value="">質問画面を選択</option></select>
+    <label for="preview-type">結果タイプの確認サンプル</label>
+    <select id="preview-type" onchange="showPreviewResult(this.value)"><option value="">結果タイプを選択</option></select>
+    <p class="preview-warning">このデモ版は、既存の設問・判定・ナレッジ文面を使ったデザインプレビューです。LINE登録・Zoom案内・回答送信は動作しません。</p>
+  </div>
+</details>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   [UTAGE版のみの差分] 以下の即時関数による囲みと、末尾の window 公開4行だけが
+   ローカル正本 s/thanks/1/index.html との違い。表示・レイアウト・判定は一切不変。
+   理由: UTAGEはraw_htmlページにファネル共通JSとPV計測スクリプトを自動挿入するため、
+   トップレベルの const（$ / CONFIG 等）がそちらと衝突すると
+   「Identifier has already been declared」でスクリプト全体が停止する。
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+/* ════════════════════════════════════════════════════════════════
+   年の差恋愛「3つのつまずき診断」本番版
+   ・判定  = 01_結果判定ロジック提案.md v1.1（4カテゴリ・全11パターン）
+   ・設問  = 02_基本仕様書.md 4章（全21問・スキップ分岐2箇所）
+   ・結果  = 11タイプ名と5項目は維持し、Waka恋愛ナレッジの主要論点と
+             21問の回答の組み合わせから、このページ内で個別文面を生成する
+   ・終端  = 診断だけで解決させず、既存の無料Zoom勉強会予約導線へ接続する
+   ════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════
+   運用設定：ここだけ書き換えれば運用できます
+   ══════════════════════════════════════════════════════ */
+const CONFIG={
+
+  /* 公式LINE（UTAGE／Waka塾公式LINE4 @977hgiqp）の友だち追加URL。
+     UTAGEの「登録経路（LINE友だち追加）」ごとに mtid の値が変わる。 */
+  LINE_BASE:'',
+
+  /* 診断結果ページのZoom勉強会CTA。押すと公式LINEに予約カードが届く既存経路。 */
+  ZOOM_URL:'',
+
+  /* ══════════════════════════════════════════════════════════════════
+     [UTAGE 接続ポイント③] 型別配信の振り分けコード（2026-08-29 接続済み）。
+     UTAGE：配信アカウント「Waka塾メルマガ」8YLcNlcul65k
+           → シナリオ「恋愛診断ツール」VWRQLbumK1ON → 登録経路（LINE友だち追加）11本。
+     各経路を配信条件にした「登録直後のLINE」が、型別の診断結果ページURLを送る。
+     ══════════════════════════════════════════════════════════════════ */
+  /* 判定結果11パターン → UTAGEの登録経路（mtid）。2026-08-29 設定済み。
+     UTAGE管理画面: メール・LINE配信 → Waka塾メルマガ → 恋愛診断ツール → 登録経路
+     空にすると mtid なしの共通URLになる（登録はされるが型別の結果は届かない）。 */
+  LAND_CODE:{
+    '1-A':'5U4ruH30HtsQ',   /* ① 出会い       ／ 出会いの接点不足タイプ */
+    '1-B':'StZ25UPfjEXh',   /* ① 出会い       ／ 出会い方ミスマッチタイプ */
+    '1-C':'yO9BqgOU3NMf',   /* ① 出会い       ／ 過去の成功パターン継続タイプ */
+    '2-A':'qpGCqR4rXx5j',   /* ② 会話         ／ 会話の入口で緊張しやすいタイプ */
+    '2-B':'oH3DXW7hoquF',   /* ② 会話         ／ 雑談止まりタイプ */
+    '2-C':'ivNF5nxBQJLB',   /* ② 会話         ／ 相手の反応読み違いタイプ */
+    '3-A':'LORGaX4VrhMV',   /* ③ 距離の縮め方 ／ 会話の数で勝負タイプ */
+    '3-B':'XcFe1dW3oggF',   /* ③ 距離の縮め方 ／ 自己流スキンシップタイプ */
+    '3-C':'Q8icgd1LQRTM',   /* ③ 距離の縮め方 ／ 安心感はあるが進展しにくいタイプ */
+    '4-A':'FqMudbuR9mS1',   /* ④ 成功目前     ／ 誠実さ一本足タイプ */
+    '4-B':'L4tYagIodbqe'    /* ④ 成功目前     ／ 条件アピール先行タイプ */
+  },
+
+  /* ══════════════════════════════════════════════════════════════════
+     [UTAGE 後接続ポイント④] 回答保存先。UTAGE上でもクロスオリジンの制約は無い
+     （sendBeacon / fetch(no-cors, text/plain) は単純リクエストなので
+     プリフライトが起きない）。GASのウェブアプリURLを貼れば動く。
+     ══════════════════════════════════════════════════════════════════ */
+  /* 回答保存先（GASウェブアプリのURL）。2026-09-02 接続済み。空なら送信しない（表示には影響しない）。
+     受け側＝スプレッドシート「恋愛診断ツール_回答ログ」に紐づくApps Script「恋愛診断ツール_回答ログ受信」。
+     ev==='complete' の1件だけを「回答一覧」シートに1行追記する（start/answer/line_tap は捨てる）。 */
+  GAS_URL:'',
+
+  /* 回答値（年代・好みの年代）をUTAGEの共通読者に書き込む先。
+     シナリオ「診断_回答値受け皿」PUHW1stIf6Sy（配信0通・書き込み専用）。
+     ここに書いた値は共通読者に載るので、このあと公式LINEに登録すると
+     登録直後LINEの %free1% / %free2% で解決され、結果ページのURLに乗る。
+     空にすると送信しない（結果ページ側が中立文言にフォールバックする）。 */
+  PROFILE_STORE_URL:'',
+
+  /* true にするとブラウザのコンソールに送信内容を出力する（動作確認用） */
+  DEBUG:false
+};
+
+/* 判定が返しうる11パターン（LAND_CODE / RESULT_META のキーと一致していること） */
+const PATTERNS=['1-A','1-B','1-C','2-A','2-B','2-C','3-A','3-B','3-C','4-A','4-B'];
+
+/* カテゴリ名とタイプ名（既存11パターンを維持）。 */
+const RESULT_META={
+  '1-A':{cat:'出会い',      color:'var(--c-deai)',  type:'出会いの接点不足タイプ'},
+  '1-B':{cat:'出会い',      color:'var(--c-deai)',  type:'出会い方ミスマッチタイプ'},
+  '1-C':{cat:'出会い',      color:'var(--c-deai)',  type:'過去の成功パターン継続タイプ'},
+  '2-A':{cat:'会話',        color:'var(--c-kaiwa)', type:'会話の入口で緊張しやすいタイプ'},
+  '2-B':{cat:'会話',        color:'var(--c-kaiwa)', type:'雑談止まりタイプ'},
+  '2-C':{cat:'会話',        color:'var(--c-kaiwa)', type:'相手の反応読み違いタイプ'},
+  '3-A':{cat:'距離の縮め方',color:'var(--c-kyori)', type:'会話の数で勝負タイプ'},
+  '3-B':{cat:'距離の縮め方',color:'var(--c-kyori)', type:'自己流スキンシップタイプ'},
+  '3-C':{cat:'距離の縮め方',color:'var(--c-kyori)', type:'安心感はあるが進展しにくいタイプ'},
+  '4-A':{cat:'成功目前',    color:'var(--c-goal)',  type:'誠実さ一本足タイプ'},
+  '4-B':{cat:'成功目前',    color:'var(--c-goal)',  type:'条件アピール先行タイプ'}
+};
+
+/* ══════════════════════════════════════════════════════
+   ナレッジ連動の個別回答生成
+   参照元: Googleスプレッドシート「Waka恋愛ナレッジ一覧」
+   2026-09-05時点（ナレッジ化101動画・759件）の主要論点を、
+   診断の11パターンへ対応づけたもの。外部AIやAPIキーをページに置かず、
+   21問の回答の組み合わせから毎回文章を組み立てる。
+   ══════════════════════════════════════════════════════ */
+const KNOWLEDGE_GUIDE={
+  '1-A':{
+    point:'恋愛以前の「出会いの接点」がまだ設計できていない状態です',
+    knowledge:'Waka恋愛ナレッジでは、出会いがほぼない状態で会話や距離の縮め方だけを学んでも、実際の相手に合わせて修正できないとされています。先に必要なのは、年代差と目的に合う接点の条件を特定することです。',
+    first:'どんな女性と、どのような場なら無理なく接点を作れるのかを、あなたの生活状況まで含めて切り分けること',
+    avoid:'準備や自信が整うまで待つこと、または選択肢を増やすだけで安心すること',
+    zoom:['今の生活の中で接点に変えられる場所','年代差によって不利になりやすい条件','最初に見直すべき一か所']
+  },
+  '1-B':{
+    point:'行動量ではなく「出会う場所との相性」で止まっている状態です',
+    knowledge:'Waka恋愛ナレッジでは、年齢やプロフィール条件が先に比較される出会い方ほど、年の差恋愛では会う前に候補から外れやすいと整理されています。努力量より、どの土俵で会おうとしているかの影響が大きい領域です。',
+    first:'現在の出会い方が、あなたの年代と好みの女性の年代のどこで食い違っているかを特定すること',
+    avoid:'成果が出ていない手段の回数や課金だけを増やし、同じ条件のまま続けること',
+    zoom:['今の出会い方が不利になる理由','理想の女性と接点を作るために必要な条件','今の努力を無駄にしない切り替え方']
+  },
+  '1-C':{
+    point:'過去に通用した出会い方を、今の年代と目標に合わせて更新できていない状態です',
+    knowledge:'Waka恋愛ナレッジでは、本人の魅力が急になくなったのではなく、本人と狙う女性の年代が変わったのに、出会い方だけが過去のまま残ることで止まるケースがあると整理されています。',
+    first:'過去の成功のうち今も使える部分と、年代差に合わせて変える部分を分けること',
+    avoid:'昔の成功をそのまま繰り返すことと、反対に「年齢のせい」と全部を諦めること',
+    zoom:['過去の成功パターンの棚卸し','今の年代でも残すべき強み','現在の目標に合わせて変える入口']
+  },
+  '2-A':{
+    point:'会話力そのものではなく「会話の入口」で流れを作れずに止まっている状態です',
+    knowledge:'Waka恋愛ナレッジでは、話題をたくさん知ることと、初対面で距離が縮まる会話は別物とされています。緊張や沈黙は性格だけの問題ではなく、最初の数分の流れが決まっていないときに強く出やすい部分です。',
+    first:'最初の数分のどの場面で緊張が強くなり、流れが途切れているのかを特定すること',
+    avoid:'会話ネタを暗記したり、無理に面白い人を演じたりして、その場を乗り切ろうとすること',
+    zoom:['緊張が起きる位置の見つけ方','情報交換で終わらない会話の流れ','あなたの回答に合う入口の修正点']
+  },
+  '2-B':{
+    point:'会話は成立していても、情報交換や楽しい雑談の先へ進めていない状態です',
+    knowledge:'Waka恋愛ナレッジでは、仕事・自己紹介・時事などの情報交換は会話を続けやすい一方、それだけでは恋愛としての距離が動かないと整理されています。会話が途切れないことと、また会いたいと思われることは同じではありません。',
+    first:'実際の会話が、どこまで情報交換で、どこから関係を動かす会話になるべきだったのかを確認すること',
+    avoid:'話題の数や知識を増やすことだけで、次の約束につなげようとすること',
+    zoom:['雑談と関係が動く会話の違い','別れ際までに足りなかった流れ','あなたの話題選びを変える判断基準']
+  },
+  '2-C':{
+    point:'女性の表面的な反応と、関係が進む反応を見分けるところで止まっています',
+    knowledge:'Waka恋愛ナレッジでは、笑顔や相づちだけを好意と判断せず、会話中の反応を見ながら流れを変えることが重要とされています。反応が毎回違って見える場合は、見るべきサインが定まっていない可能性があります。',
+    first:'これまで好意だと思っていた反応と、実際に次へ進んだときの反応を分けて確認すること',
+    avoid:'一つの笑顔や褒め言葉だけで脈あり・脈なしを決め、同じ会話を押し通すこと',
+    zoom:['表面的な愛想と好意の違い','反応に合わせて会話を変える基準','あなたが読み違えやすいサイン']
+  },
+  '3-A':{
+    point:'会話から先へ進むための、安全な距離の縮め方が未確定の状態です',
+    knowledge:'Waka恋愛ナレッジでは、会話だけを重ねても関係が動かない一方、スキンシップは順番・タイミング・言葉がけを外すと逆効果になると整理されています。相手の明確な同意と反応を確認することが前提です。',
+    first:'どの反応を確認してから次へ進むのかを含め、安全な順番とタイミングを理解すること',
+    avoid:'正解がわからないまま自己流で触れること、または拒否のサインを都合よく解釈すること',
+    zoom:['距離を縮める前に見る反応','同意を確認しながら進める順番','あなたが最初に理解すべき境界線']
+  },
+  '3-B':{
+    point:'距離を縮めようとする場面で「順番・タイミング・反応確認」がずれています',
+    knowledge:'Waka恋愛ナレッジでは、スキンシップは強さを段階的に上げ、言葉がけと相手の反応確認をセットにする必要があるとされています。拒否・回避・嫌そうな反応があれば、その場で止めることが大前提です。',
+    first:'拒否された直前の会話・距離・言葉がけを振り返り、どこで相手との認識がずれたかを特定すること',
+    avoid:'拒否のあとも続けること、同じやり方を別の相手に試すこと、反対に理由を確認せず全部を諦めること',
+    zoom:['拒否につながった場面の切り分け','相手の同意と反応を確認する基準','同じ失敗を繰り返さない修正点']
+  },
+  '3-C':{
+    point:'安心感は作れていても、恋愛として関係を動かす最後の切り替えで止まっています',
+    knowledge:'Waka恋愛ナレッジでは、会話が続き、相手の反応も悪くないのに進展しない場合、優しさや安心感だけで終わり、恋愛としての温度差を作れていない可能性があると整理されています。',
+    first:'会話・相手の反応・別れ際の流れを並べ、どの場面で「いい人」のまま終わったかを特定すること',
+    avoid:'急に強引になることや、さらに尽くして好かれようとすること',
+    zoom:['安心感と恋愛感情の違い','関係が止まった場面の見つけ方','あなたに必要な最後の切り替え']
+  },
+  '4-A':{
+    point:'成果は出せても、本当に好みの女性を前にしたときだけ従来のやり方へ戻っています',
+    knowledge:'Waka恋愛ナレッジでは、誠実さそのものが悪いのではなく、好みの女性ほど褒める・合わせる・条件を良く見せる行動が増え、普段の自然な主導性を失うことが年の差恋愛の壁になると整理されています。',
+    first:'うまくいった相手と、本命の女性を前にしたときで、自分の言動がどう変わるかを比較すること',
+    avoid:'年収・肩書き・服装・高い店などの条件をさらに足し、相手に合わせる量を増やすこと',
+    zoom:['本命の前だけ変わる言動','誠実さが媚びに変わる境目','今ある経験を理想の相手へ応用する方法']
+  },
+  '4-B':{
+    point:'関係を始める力はある一方、その後の関係性を保つ主導権で止まっています',
+    knowledge:'Waka恋愛ナレッジでは、最初の成果と関係を続ける力は別に確認する必要があり、関係後に尽くしすぎる・条件を示しすぎる・相手の反応に振り回されることで立場が変わるケースがあると整理されています。',
+    first:'関係が始まる前後で、連絡・会話・予定の決め方がどう変化したかを確認すること',
+    avoid:'離れられないように連絡・出費・条件アピールを増やし、相手の反応だけで行動を決めること',
+    zoom:['関係後に主導性が変わる場面','尽くすことと媚びることの境目','関係を続けるために最初に直す一か所']
+  }
+};
+
+function answerValue(id){
+  const v=ans[id];
+  return Array.isArray(v)?v.join('・'):(v||'未回答');
+}
+function fact(label,id){
+  const v=ans[id];
+  if(v==null||(Array.isArray(v)&&!v.length)) return '';
+  return label+'「'+answerValue(id)+'」';
+}
+function factsFor(pid){
+  let ids=[];
+  if(pid.charAt(0)==='1') ids=[['現在の出会い手段', 'Q7'],['月に会う新規女性', 'Q8'],['デート経験・費用', 'Q11'],['これまでの経験', 'Q5']];
+  if(pid.charAt(0)==='2') ids=[['最初の話題', 'Q13'],['帰り際の話題', 'Q14'],['会話の仕方', 'Q15'],['女性の反応', 'Q16']];
+  if(pid.charAt(0)==='3') ids=[['スキンシップ経験', 'Q17'],['最初のスキンシップ', 'Q18'],['その後の反応', 'Q19'],['関係が進むまでの回数', 'Q10']];
+  if(pid.charAt(0)==='4') ids=[['今月関係が進んだ女性', 'Q9'],['現在の悩み', 'Q20'],['デート経験・費用', 'Q11'],['会話の仕方', 'Q15']];
+  return ids.map(x=>fact(x[0],x[1])).filter(Boolean).slice(0,3);
+}
+function personalNuance(pid){
+  if(pid.charAt(0)==='1'){
+    const channels=Array.isArray(ans.Q7)?ans.Q7:[];
+    if(channels.includes('今は特にやっていない')) return '今は特に行動していないため、行動量を責めるより、動き始められない理由と接点の条件を確認する必要があります。';
+    if(channels.some(v=>['マッチングアプリ','婚活パーティー','結婚相談所'].includes(v))) return '現在は条件やプロフィールが先に見られやすい手段を含んでいます。特に「'+answerValue('Q1')+'から'+answerValue('Q3')+'を希望」という組み合わせでは、会う前の選別が結果に影響している可能性があります。';
+    if(channels.includes('職場の女性')) return '職場という継続的な人間関係を含むため、単に接点を増やすのではなく、仕事上の関係を壊さない見極めが必要です。';
+    if(channels.length>1) return '複数の手段を使っているため、さらに増やす前に、どの手段で止まっているかを分けて見る必要があります。';
+    return '選んだ手段と実際に会えている人数の組み合わせから、努力量より接点の設計を先に見直す必要があります。';
+  }
+  if(pid.charAt(0)==='2'){
+    if(answerValue('Q15').includes('緊張')||answerValue('Q13').includes('緊張')) return '特に今回は「緊張で頭が真っ白になる」という回答があり、話題不足より、会話の入口に再現できる流れがないことが強く出ています。';
+    if(['自己紹介','仕事の会話','時事ネタ'].includes(ans.Q13)||['自己紹介','仕事の会話','時事ネタ'].includes(ans.Q14)) return '自己紹介・仕事・時事のような情報交換が中心です。会話が成立しても、恋愛としての距離が動いたかは別に確認する必要があります。';
+    if(ans.Q16==='毎回、女性の反応が違う'||ans.Q16==='そもそも女性の反応がわからない') return '女性の反応を一定の基準で見られていないため、同じ会話でも成功・失敗の理由をつかみにくい状態です。';
+    return '話題そのものより、相手の反応を見て会話の流れを変える基準が曖昧な可能性があります。';
+  }
+  if(pid.charAt(0)==='3'){
+    if(['拒否する','身体をよけられる','嫌そうな反応をする'].includes(ans.Q19)) return '今回の「'+answerValue('Q19')+'」は、続けずに止めるべき明確なサインです。ここは自己判断で試し直さず、直前の流れから原因を確認する必要があります。';
+    if(ans.Q17==='スキンシップをやったことがない'||ans.Q19==='スキンシップをやったことがない') return '未経験の状態では、何かを実践する前に、同意の確認と安全な境界線を理解することが先です。';
+    return '反応が悪くないのに成果へつながらないため、触れ方だけでなく、その前後の会話と別れ際まで含めて確認する必要があります。';
+  }
+  if(pid==='4-A') return 'すでに成果がある一方、「'+answerValue('Q20')+'」という悩みが残っています。できないのではなく、本命の前だけ変わる行動を見つける段階です。';
+  return '関係を始めるところまでは到達しているため、初対面の技術ではなく、関係が始まった後の変化を見る必要があります。';
+}
+function buildPersonalResult(pid){
+  const g=KNOWLEDGE_GUIDE[pid];
+  const age=answerValue('Q1'), pref=answerValue('Q3'), goal=answerValue('Q4');
+  const facts=factsFor(pid);
+  const factText=facts.length?facts.map(v=>'「'+v+'」').join('、'):'回答全体の組み合わせ';
+  const context=age+'のあなたが、'+pref+'の女性と「'+goal+'」の関係を目指す現在地では、';
+  return [
+    context+g.point+'。タイプ名だけでは同じでも、今回の回答ではこの止まり方が強く出ています。',
+    '直接の根拠は、'+factText+'という回答が重なっていることです。\n\n'+g.knowledge+'\n\n'+personalNuance(pid),
+    '最初に必要なのは、'+g.first+'です。ただし、選択式の回答だけでは「あなたの場合の正しい修正点」までは確定できません。ここで一般論を試すのではなく、無料Zoom勉強会で実際の状況を聞きながら一か所に絞ります。',
+    g.avoid+'です。今のつまずきを年齢・ルックス・性格のせいにして、別の自己流へ進むことも避けてください。回答の背景を確認せずに動くと、同じ場所で止まり方だけが変わる可能性があります。',
+    '無料Zoom勉強会では、'+g.zoom.join('、')+'を、今回の回答に合わせて確認します。診断結果の説明だけで終わらせず、なぜ今まで止まっていたのかを具体的な場面まで掘り下げ、あなたが最優先で直す一点を明らかにします。'
+  ];
+}
+
+function showPersonalizedResult(pid){
+  const meta=RESULT_META[pid], copy=buildPersonalResult(pid);
+  const nums={'1':'①','2':'②','3':'③','4':'④'};
+  const badge=$('result-badge');
+  badge.textContent=nums[pid.charAt(0)]+' '+meta.cat;
+  badge.style.background=meta.color;
+  $('result-type').textContent=meta.type;
+  copy.forEach((v,i)=>{$('result-'+(i+1)).textContent=v;});
+  $('zoom-btn').href='#';
+  updateResultDesign(pid);
+  show('scr-result');
+}
+
+/* ══════════════════════════════════════════════════════
+   設問定義（02_基本仕様書.md 4章 / 全21問）
+   ══════════════════════════════════════════════════════ */
+const TOPICS=['自己紹介','仕事の会話','自分が得意な話題','女性の好きそうな話題','時事ネタ','お互いの趣味','お互いの共通点','想像上の会話','今後のこと','緊張で頭が真っ白になる'];
+const SECS=['基本情報','出会い','会話','距離','あなたの悩み'];
+const SEC_COLORS={'基本情報':'var(--gold)','出会い':'var(--c-deai)','会話':'var(--c-kaiwa)','距離':'var(--c-kyori)','あなたの悩み':'var(--gold)'};
+const QUESTIONS=[
+ {id:'Q1', sec:'基本情報', t:'あなたの年齢を教えてください', o:['20代','30代','40代','50代','60代','70代以上']},
+ {id:'Q2', sec:'基本情報', t:'結婚はしていますか', o:['未婚','既婚']},
+ {id:'Q3', sec:'基本情報', t:'好みの女性の年代を教えてください', o:['20代','30代','40代','50代以上']},
+ {id:'Q4', sec:'基本情報', t:'その女性とどんな関係になりたいですか', o:['彼女','結婚','セフレ']},
+ {id:'Q5', sec:'基本情報', t:'今まで、何人の女性と深い関係になりましたか', o:['0人','1人～5人','6人～10人','11人以上']},
+ {id:'Q6', sec:'基本情報', t:'今まで、20歳以上年下の女性と付き合ったことがありますか', o:['ある','ない']},
+ {id:'Q7', sec:'出会い', t:'現在、どんな出会いの手段を使っていますか', o:['職場の女性','合コン','マッチングアプリ','婚活パーティー','結婚相談所','ナンパ','今は特にやっていない'], multi:true, excl:'今は特にやっていない'},
+ {id:'Q8', sec:'出会い', t:'現在、新規の女性と月に何人くらい会えてますか', o:['0人','1人～5人','6人～10人','11人以上']},
+ {id:'Q9', sec:'出会い', t:'現在、新規の女性と月に何人くらい深い関係になってますか', o:['0人','1人～5人','6人～10人','11人以上']},
+ {id:'Q10', sec:'出会い', t:'女性と深い関係になるまで、平均何回くらい会いますか', o:['1回','2回','3回以上','深い関係になったことがない']},
+ {id:'Q11', sec:'出会い', t:'好みの女性と1回のデートで平均いくらくらい使いますか', o:['1000円未満','1000円～3000円','3000円～10000円','10000円以上','女性とデートをしたことがない']},
+ {id:'Q12', sec:'会話', t:'女性と会話するとき、どのような席に座りますか', o:['対面席','横並び','特に決まっていない','対面で会話したことがない','女性と会話したことがない']},
+ {id:'Q13', sec:'会話', t:'女性とは最初にどのような話題の会話をしますか', o:TOPICS},
+ {id:'Q14', sec:'会話', t:'帰り際に女性とどのような話題の会話をしますか', o:TOPICS},
+ {id:'Q15', sec:'会話', t:'女性とはどのような会話の仕方をしますか', o:['一方的に話す','相手の話す量と自分の話す量が同じくらいになるように話す','聞き役に徹する','よく話題に詰まってしまう','緊張で頭が真っ白になる']},
+ {id:'Q16', sec:'会話', t:'女性と会話しているとき、女性の反応はどうですか', o:['興味深そうな反応','一応やりとりはしている感じの反応','会話がかみ合っていない感じの反応','うっとりと見つめてくる','早く帰りたそうな反応をする','相手からスキンシップをしてくる','毎回、女性の反応が違う','そもそも女性の反応がわからない']},
+ {id:'Q17', sec:'距離', t:'スキンシップは得意ですか', o:['得意','あまり得意ではない','スキンシップをやったことがない']},
+ {id:'Q18', sec:'距離', t:'女性に対して最初にどこからスキンシップをしますか', o:['手を繋ぐ','肩を触る','髪を触る','指を触る','脚に触る','キスをする','わからない']},
+ {id:'Q19', sec:'距離', t:'スキンシップをしたあとの女性の反応はどうですか', o:['もっとしてほしそうにする','拒否する','女性から身体を近づけてくる','女性からスキンシップしてくる','身体をよけられる','嫌そうな反応をする','スキンシップをやったことがない']},
+ {id:'Q20', sec:'あなたの悩み', t:'あなたの異性関係の悩みは', o:['好みの女性となるとうまくいかない','ルックスの良い女性となるとうまくいかない','若い女性になるとうまくいかない','ワンナイトはできるが既存化ができない','今後も一生独身かと不安になる','そもそも女性経験が少ない'], multi:true},
+ {id:'Q21', sec:'あなたの悩み', t:'今まで恋愛塾や恋愛教材に合計いくらくらい投資してきましたか', o:['全く投資していない','10万円以下','10万円～30万円','30万円～100万円','100万円以上']}
+];
+
+/* スキップ分岐（02_基本仕様書.md 4章） */
+function isSkipped(q,a){
+  if(['Q13','Q14','Q15','Q16'].includes(q.id) && a.Q12==='女性と会話したことがない') return true;
+  if(['Q18','Q19'].includes(q.id) && a.Q17==='スキンシップをやったことがない') return true;
+  return false;
+}
+
+/* ══════════════════════════════════════════════════════
+   判定ロジック v1.1（01_結果判定ロジック提案.md 準拠）
+   関門方式：ゲート0(成果) → ゲート1(出会い) → ゲート2(会話) → ゲート3(距離)
+   戻り値は必ず 11パターンのID（1-A〜4-B）のいずれか
+   ══════════════════════════════════════════════════════ */
+function judge(a){
+  const has=(arr,v)=>Array.isArray(arr)&&arr.includes(v);
+
+  /* ───── ゲート0: 成果確認（矛盾チェック付き） → ④成功目前 ───── */
+  const met0=a.Q8==='0人';
+  let deepMonthly=a.Q9&&a.Q9!=='0人';
+  if(deepMonthly&&(a.Q5==='0人'||a.Q10==='深い関係になったことがない')) deepMonthly=false;
+  if(deepMonthly&&!met0){
+    if(has(a.Q20,'若い女性になるとうまくいかない')||has(a.Q20,'ルックスの良い女性となるとうまくいかない')||has(a.Q20,'好みの女性となるとうまくいかない')) return '4-A';
+    if(has(a.Q20,'ワンナイトはできるが既存化ができない')) return '4-B';
+    /* 旧 general（Q20に該当悩みなし）: 4-A に集約。
+       4-A＝誠実系（一般的なやり方）が通用しない、が最も当てはまるため（01の未定義ケースを確定） */
+    return '4-A';
+  }
+
+  /* ───── ゲート1: 出会い → ①出会い ───── */
+  const noAction=Array.isArray(a.Q7)&&a.Q7.length===1&&a.Q7[0]==='今は特にやっていない';
+  const noDate=a.Q11==='女性とデートをしたことがない';
+  if(met0||noAction||noDate){
+    const inexp=a.Q5==='0人'||a.Q12==='女性と会話したことがない';
+    const acting=Array.isArray(a.Q7)&&a.Q7.some(v=>v!=='今は特にやっていない');
+    if(inexp) return '1-A';                 /* 未経験スタート */
+    if(acting&&met0) return '1-B';          /* 手段ミスマッチ */
+    return '1-C';                           /* 再起動 */
+  }
+
+  /* ───── ゲート2: 会話 → ②会話 ───── */
+  const MENSETSU=['自己紹介','仕事の会話','時事ネタ'];
+  const talkedNever=a.Q12==='女性と会話したことがない';
+  const badReact=['会話がかみ合っていない感じの反応','早く帰りたそうな反応をする','そもそも女性の反応がわからない'].includes(a.Q16);
+  const closeNG=['自己紹介','仕事の会話','緊張で頭が真っ白になる'].includes(a.Q14);
+  const hardTalk=badReact||closeNG||talkedNever;
+  /* 成果オーバーライド: 反応が良く帰り際も次につながっていれば会話クリア */
+  const talkPass=['興味深そうな反応','うっとりと見つめてくる','相手からスキンシップをしてくる'].includes(a.Q16)&&a.Q14==='今後のこと';
+  let soft=0;
+  if(a.Q16==='一応やりとりはしている感じの反応') soft++;
+  if(a.Q16==='毎回、女性の反応が違う') soft++;
+  if(['一方的に話す','聞き役に徹する','よく話題に詰まってしまう','緊張で頭が真っ白になる'].includes(a.Q15)) soft++;
+  const topicNG=MENSETSU.includes(a.Q13);
+  if(topicNG) soft++;
+  if(a.Q13==='緊張で頭が真っ白になる') soft++;
+  if(a.Q14==='時事ネタ') soft++;
+  if(a.Q12==='対面席') soft++;
+  if(!talkPass&&(hardTalk||soft>=2)){
+    if(talkedNever||a.Q16==='そもそも女性の反応がわからない'||a.Q13==='緊張で頭が真っ白になる') return '2-A';  /* 会話の入口 */
+    /* 2026-08-10 v1.1: 旧2-C（面接化 mensetsu）を 2-B に統合（topicNG をここに合流） */
+    if(closeNG||a.Q14==='時事ネタ'||topicNG) return '2-B';                                                    /* 雑談止まり */
+    return '2-C';                                                                                             /* 反応読み違い */
+  }
+
+  /* ───── ゲート3: 距離 → ③距離の縮め方 ───── */
+  const untouched=a.Q17==='スキンシップをやったことがない'||a.Q18==='わからない'||a.Q19==='スキンシップをやったことがない';
+  const badResp=['拒否する','身体をよけられる','嫌そうな反応をする'].includes(a.Q19);
+  if(untouched) return '3-A';
+  if(badResp) return '3-B';
+
+  /* ───── ゲート4: 全関門通過だが成果0 → 3-C（詰めの一歩） ───── */
+  return '3-C';
+}
+
+/* ══════════════════════════════════════════════════════
+   公式LINE登録URL（UTAGEの登録経路）の型別出し分け
+   ══════════════════════════════════════════════════════ */
+function landCode(pid){
+  const c=CONFIG.LAND_CODE[pid];
+  return (c&&String(c).trim())?String(c).trim():'';
+}
+function lineUrl(pid){
+  const c=landCode(pid);
+  /* コードが無いときは mtid なしの共通URL。登録はできるが型別の結果は届かない */
+  return c?(CONFIG.LINE_BASE+'?mtid='+encodeURIComponent(c)):CONFIG.LINE_BASE;
+}
+
+/* ══════════════════════════════════════════════════════
+   画面制御
+   ══════════════════════════════════════════════════════ */
+let ans={}, idx=0, pattern=null;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0);}
+function visibleList(){return QUESTIONS.filter(q=>!isSkipped(q,ans));}
+
+function startQuiz(){ans={};idx=0;pattern=null;sendLog({ev:'start'});show('scr-q');render();}
+
+function render(){
+  while(idx<QUESTIONS.length&&isSkipped(QUESTIONS[idx],ans)) idx++;
+  if(idx>=QUESTIONS.length){finish();return;}
+  const q=QUESTIONS[idx], vl=visibleList(), pos=vl.indexOf(q)+1;
+  const si=SECS.indexOf(q.sec);
+  $('qsec').textContent='─ 3つのつまずき診断 ─';
+  const qc=$('qcat');
+  qc.textContent='カテゴリ'+(si+1)+'/'+SECS.length+'：'+q.sec;
+  const sc=SEC_COLORS[q.sec]||'var(--gold)';
+  qc.style.borderColor=sc;
+  qc.style.color=sc;
+  $('qnum').textContent='質問 '+pos+'／'+vl.length;
+  $('barfill').style.width=Math.round(pos/vl.length*100)+'%';
+  $('qtext').textContent=q.t;
+  $('qnote').textContent=q.multi?'当てはまるものを、すべて選んでください（複数選択できます）':'当てはまるものを、1つ選んでください';
+  const box=$('opts');box.innerHTML='';
+  q.o.forEach(op=>{
+    const b=document.createElement('button');b.className=q.multi?'opt cb':'opt';b.textContent=op;
+    const cur=ans[q.id];
+    if(q.multi?(Array.isArray(cur)&&cur.includes(op)):cur===op) b.classList.add('sel');
+    b.onclick=()=>pick(q,op,b);
+    box.appendChild(b);
+  });
+  $('btn-back').style.visibility=(vl.indexOf(q)===0)?'hidden':'visible';
+  $('btn-next').style.display='block';
+  $('btn-next').disabled=q.multi?!(Array.isArray(ans[q.id])&&ans[q.id].length):(ans[q.id]==null);
+  updateQuestionDesign(q,pos,vl.length);
+}
+
+function pick(q,op,btn){
+  if(q.multi){
+    let cur=Array.isArray(ans[q.id])?[...ans[q.id]]:[];
+    if(cur.includes(op)) cur=cur.filter(v=>v!==op);
+    else{
+      if(q.excl&&op===q.excl) cur=[op];
+      else{cur=cur.filter(v=>v!==q.excl);cur.push(op);}
+    }
+    ans[q.id]=cur;render();
+  }else{
+    ans[q.id]=op;
+    render();
+  }
+}
+function goNext(){const q=QUESTIONS[idx];sendLog({ev:'answer',q:q.id,v:ans[q.id]});idx++;render();window.scrollTo(0,0);}
+function goBack(){
+  let i=idx-1;
+  while(i>=0&&isSkipped(QUESTIONS[i],ans)) i--;
+  if(i>=0){idx=i;render();window.scrollTo(0,0);}
+}
+
+/* ══════════════════════════════════════════════════════
+   診断完了 → ナレッジと回答の組み合わせから個別結果を生成
+   ══════════════════════════════════════════════════════ */
+function finish(){
+  pattern=judge(ans);
+  sendLog({ev:'complete',pattern:pattern});
+  sendProfile();
+  show('scr-analyzing');
+  window.setTimeout(function(){showPersonalizedResult(pattern);},700);
+}
+function onZoomTap(){previewNotice('result');return false;}
+function restartQuiz(){ startQuiz(); }
+
+/* ══════════════════════════════════════════════════════
+   回答データ保存（02_基本仕様書.md 7章）
+   CONFIG.GAS_URL が空なら送信しない。送信失敗は表示を妨げない（ベストエフォート）
+   ══════════════════════════════════════════════════════ */
+const SID=(function(){
+  try{
+    if(window.crypto&&crypto.getRandomValues){
+      const b=new Uint8Array(8); crypto.getRandomValues(b);
+      return Array.from(b).map(x=>('0'+x.toString(16)).slice(-2)).join('');
+    }
+  }catch(e){}
+  return String(Date.now())+Math.floor(Math.random()*1e6);
+})();
+function utmParams(){
+  const o={};
+  try{
+    const q=new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','mtid'].forEach(k=>{ if(q.get(k)) o[k]=q.get(k); });
+  }catch(e){}
+  return o;
+}
+/* ══════════════════════════════════════════════════════
+   回答値（年代・好みの年代）をUTAGEの共通読者へ書き込む（2026-09-01 追加）
+   ・Q1「あなたの年齢」/ Q3「好みの女性の年代」の先頭2桁をコードとして送る
+     （20/30/40/50/60/70。日本語をURLに載せるとLINEの自動リンクが切れるため）
+   ・メールアドレスはLP（同一オリジン）が控えたものを使う。無ければ送らない
+   ・no-cors の単純リクエストなのでプリフライトは起きない。応答は読めないので
+     成否はUTAGEの読者データ側で確認する（ベストエフォート）
+   ══════════════════════════════════════════════════════ */
+function ageCode(v){ const m=String(v||'').match(/[0-9]{2}/); return m?m[0]:''; }
+function storedMail(){ try{ return localStorage.getItem('wj_shindan_mail')||''; }catch(e){ return ''; } }
+let profileSent=false;
+function sendProfile(){/* ローカル確認版：本番への書き込みを無効化 */}
+function sendLog(p){/* ローカル確認版：本番ログへの送信を無効化 */}
+
+/* C案ローカル確認用。設問・判定・結果生成のデータは元HTMLを使用。 */
+function updateStageGuide(id,stage){
+  $(id).querySelectorAll('[data-stage]').forEach(el=>{
+    const active=el.dataset.stage===stage;
+    el.classList.toggle('active',active);
+    if(active)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
+  });
+}
+const DESIGN_ICONS={
+  "pin": "<path d=\"M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z\"/><circle cx=\"12\" cy=\"10\" r=\"2.5\"/>",
+  "search": "<circle cx=\"10.5\" cy=\"10.5\" r=\"6.5\"/><path d=\"m16 16 5 5M8 10.5h5m-2.5-2.5v5\"/>",
+  "compass": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m16 8-3 5-5 3 3-5Z\"/>",
+  "shield": "<path d=\"m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5Z\"/><path d=\"M12 7v6m0 4h.01\"/>",
+  "video": "<rect x=\"3\" y=\"6\" width=\"12\" height=\"12\" rx=\"3\"/><path d=\"m15 10 6-4v12l-6-4\"/>",
+  "person": "<circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M4 21v-2a8 8 0 0 1 16 0v2\"/>",
+  "people": "<circle cx=\"9\" cy=\"8\" r=\"3\"/><path d=\"M2 21v-3a7 7 0 0 1 14 0v3M17 5a3 3 0 0 1 0 6m2 4c2 1 3 3 3 6\"/>",
+  "message": "<path d=\"M21 11c0 5-4 8-9 8H6l-4 3 1-7a8 8 0 0 1 0-8c2-3 5-4 9-4 5 0 9 3 9 8Z\"/><path d=\"M7 11h.01m5 0h.01m5 0h.01\"/>",
+  "heart": "<path d=\"M12 21 3 12C-3 5 7-2 12 6c5-8 15-1 9 6Z\"/>",
+  "building": "<path d=\"M5 22V3h14v19M2 22h20M9 22v-5h6v5M9 7h.01M15 7h.01M9 12h.01M15 12h.01\"/>",
+  "phone": "<rect x=\"6\" y=\"2\" width=\"12\" height=\"20\" rx=\"3\"/><path d=\"M10 5h4m-3 14h2\"/>",
+  "calendar": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"17\" rx=\"3\"/><path d=\"M7 2v6m10-6v6M3 11h18M7 15h2m4 0h4M7 18h2\"/>",
+  "pause": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9 8v8m6-8v8\"/>",
+  "briefcase": "<rect x=\"2\" y=\"7\" width=\"20\" height=\"15\" rx=\"3\"/><path d=\"M8 7V3h8v4M2 12c6 4 14 4 20 0M12 12v5\"/>",
+  "star": "<path d=\"m12 2 3.1 6.5 7.2 1-5.2 5.1 1.2 7.2-6.3-3.4-6.3 3.4 1.2-7.2L1.7 9.5l7.2-1Z\"/>",
+  "globe": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><ellipse cx=\"12\" cy=\"12\" rx=\"4\" ry=\"10\"/><path d=\"M2 12h20\"/>",
+  "link": "<path d=\"m10 8 3-3a5 5 0 0 1 7 7l-3 3m-3 1-3 3a5 5 0 0 1-7-7l3-3m1 7 8-8\"/>",
+  "thought": "<path d=\"M8 16c-8 0-8-11-1-12C9 0 16 1 18 5c6 0 7 10 1 11Z\"/><circle cx=\"5\" cy=\"20\" r=\"2\"/>",
+  "sprout": "<path d=\"M12 22V11C3 12 2 6 3 3c6-1 10 2 9 8 0-8 6-10 10-8 0 6-3 10-10 8\"/>",
+  "repeat": "<path d=\"M20 8a8 8 0 0 0-14-3L3 8m0-5v5h5m-4 8a8 8 0 0 0 14 3l3-3m0 5v-5h-5\"/>",
+  "hand": "<path d=\"M8 12V5a2 2 0 0 1 4 0v6m0-5a2 2 0 0 1 4 0v6m0-3a2 2 0 0 1 4 0v7c0 8-10 9-14 3l-4-6a2 2 0 0 1 3-3l3 4\"/>",
+  "ring": "<circle cx=\"9\" cy=\"12\" r=\"5.5\"/><circle cx=\"15\" cy=\"12\" r=\"5.5\"/>",
+  "check": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m7.5 12 3 3 6.5-7\"/>",
+  "cross": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8.5 8.5 7 7m0-7-7 7\"/>",
+  "opposite-seat": "<circle cx=\"6\" cy=\"6\" r=\"2.5\"/><circle cx=\"18\" cy=\"6\" r=\"2.5\"/><path d=\"M2 13v-1a4 4 0 0 1 8 0v1m4 0v-1a4 4 0 0 1 8 0v1M3 16h18M6 16v5m12-5v5\"/>",
+  "side-seat": "<circle cx=\"8\" cy=\"7\" r=\"2.5\"/><circle cx=\"16\" cy=\"7\" r=\"2.5\"/><path d=\"M3 15v-1a5 5 0 0 1 10-1 5 5 0 0 1 8 1v1M3 17h18M5 17v4m14-4v4\"/>",
+  "shuffle": "<path d=\"M3 7h3c5 0 7 10 12 10h3m-3-3 3 3-3 3M3 17h3c2 0 3-2 4-4m4-6c1-1 2-2 4-2h3m-3-3 3 3-3 3\"/>",
+  "message-off": "<path d=\"M20 15a8 8 0 0 0-8-12c-4 0-7 1-9 4a8 8 0 0 0 0 8l-1 7 4-3h6c2 0 3 0 5-1M3 3l18 18\"/>",
+  "speaker": "<circle cx=\"7\" cy=\"7\" r=\"3\"/><path d=\"M2 21v-3a5 5 0 0 1 10 0v3m3-14h7m-7 5h5m-5 5h7\"/>",
+  "exchange": "<path d=\"M3 4h12v8H8l-4 3 1-3H3Zm8 11h5l4 3-1-3h2v-8h-3\"/>",
+  "listen": "<path d=\"M15 17c0 3-2 5-5 5-2 0-3-1-3-3 0-3 3-4 3-7V8a5 5 0 0 1 10 0c0 3-2 4-4 5-1 1-1 2-1 4ZM13 8a2 2 0 0 1 4 0c0 2-2 2-3 3\"/>",
+  "ellipsis": "<path d=\"M21 11c0 5-4 8-9 8H6l-4 3 1-7a8 8 0 0 1 0-8c2-3 5-4 9-4 5 0 9 3 9 8Z\"/><path d=\"M7 11h.01m5 0h.01m5 0h.01\"/>",
+  "shoulder": "<circle cx=\"10\" cy=\"7\" r=\"4\"/><path d=\"M2 21v-2a8 8 0 0 1 16 0v2M18 13l3 2m0-2v4\"/>",
+  "hair": "<circle cx=\"12\" cy=\"11\" r=\"7\"/><path d=\"M5 10c1-7 12-9 15-2-5 0-8-2-10-4 0 3-2 5-5 6Zm3 9v3m8-3v3\"/>",
+  "touch": "<path d=\"M2 16c3-2 5-2 8 0l2 1 2-2c3-2 5-1 8 1M7 12l2-2m6 1 2 2m-5-7v3\"/><circle cx=\"12\" cy=\"17\" r=\"2\"/>",
+  "leg": "<path d=\"M7 3v7l4 4-3 7m9-18v8l-4 4 3 6\"/>",
+  "kiss": "<path d=\"M12 20C5 16 3 13 4 9c1-4 6-4 8 0 2-4 7-4 8 0 1 4-1 7-8 11Z\"/><path d=\"M8 13c2 1 6 1 8 0\"/>"
+};
+function designIcon(name,className){
+  const drawing=DESIGN_ICONS[name];
+  if(!drawing)return '';
+  return '<svg class="'+className+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+drawing+'</svg>';
+}
+const CHOICE_ICONS={
+  Q2:{'未婚':'person','既婚':'ring'},
+  Q4:{'彼女':'heart','結婚':'ring','セフレ':'link'},
+  Q6:{'ある':'check','ない':'cross'},
+  Q7:{'職場の女性':'building','合コン':'people','マッチングアプリ':'phone','婚活パーティー':'calendar','結婚相談所':'message','ナンパ':'person','今は特にやっていない':'pause'},
+  Q12:{'対面席':'opposite-seat','横並び':'side-seat','特に決まっていない':'shuffle','対面で会話したことがない':'message-off','女性と会話したことがない':'pause'},
+  TOPICS:{'自己紹介':'person','仕事の会話':'briefcase','自分が得意な話題':'star','女性の好きそうな話題':'heart','時事ネタ':'globe','お互いの趣味':'people','お互いの共通点':'link','想像上の会話':'thought','今後のこと':'compass','緊張で頭が真っ白になる':'thought'},
+  Q15:{'一方的に話す':'speaker','相手の話す量と自分の話す量が同じくらいになるように話す':'exchange','聞き役に徹する':'listen','よく話題に詰まってしまう':'ellipsis','緊張で頭が真っ白になる':'thought'},
+  Q18:{'手を繋ぐ':'hand','肩を触る':'shoulder','髪を触る':'hair','指を触る':'touch','脚に触る':'leg','キスをする':'kiss','わからない':'thought'},
+  Q20:{'好みの女性となるとうまくいかない':'heart','ルックスの良い女性となるとうまくいかない':'star','若い女性になるとうまくいかない':'sprout','ワンナイトはできるが既存化ができない':'repeat','今後も一生独身かと不安になる':'thought','そもそも女性経験が少ない':'message'}
+};
+
+/* 選択肢の違いを示す挿絵。値・選択状態・診断判定とは独立した表示専用処理。 */
+function choiceSvg(body,kind,level=''){
+  return '<svg class="option-illustration" data-icon-kind="'+kind+'" data-icon-level="'+level+'" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+body+'</svg>';
+}
+function agePortrait(age,female){
+  // ほかの項目と同じ人物の線画を使用し、年代は数字だけで区別する。
+  let body='<circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06" stroke="none"/>';
+  body+='<g transform="translate(7 7) scale(1.8)" stroke-width="1.2">'+DESIGN_ICONS.person+'</g>';
+  body+='<rect x="34" y="36" width="28" height="23" rx="8" fill="#fff" stroke-width="1.5"/><text x="48" y="52" text-anchor="middle" font-size="15" font-weight="700" font-family="Arial,sans-serif" fill="currentColor" stroke="none">'+age+'</text>';
+  return choiceSvg(body,female?'age-female':'age-male',age);
+}
+function peopleAmount(level){
+  let body='<circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06" stroke="none"/>';
+  const person=(x,y,scale,opacity)=>'<g transform="translate('+x+' '+y+') scale('+scale+')" opacity="'+opacity+'"><circle cx="0" cy="-9" r="5" fill="currentColor" stroke="none"/><path d="M-7 13V2a7 7 0 0 1 14 0v11" fill="currentColor" stroke="none"/></g>';
+  if(level===0){
+    body+='<g opacity=".35" stroke-dasharray="2.5 3"><circle cx="26" cy="22" r="7"/><path d="M16 46V36a10 10 0 0 1 20 0v10"/></g><circle cx="47" cy="45" r="10" fill="#fff"/><text x="47" y="49" text-anchor="middle" font-size="13" font-weight="800" font-family="Arial,sans-serif" fill="currentColor" stroke="none">0</text>';
+  }else if(level===1){body+=person(23,33,1.05,.48)+person(39,35,1.05,1);}
+  else if(level===2){body+=person(15,31,.9,.4)+person(49,31,.9,.4)+person(32,36,1.18,1);}
+  else{
+    body+=person(23,22,.77,.35)+person(41,22,.77,.35)+person(12,38,.86,.65)+person(52,38,.86,.65)+person(32,40,1.03,1);
+    body+='<circle cx="54" cy="12" r="7" fill="#fff"/><path d="M50 12h8m-4-4v8"/>';
+  }
+  return choiceSvg(body,'people',level);
+}
+function moneyAmount(level){
+  let body='<circle cx="32" cy="32" r="30" fill="#fff6df" stroke="none"/>';
+  if(level===0){
+    body+='<circle cx="27" cy="29" r="16" stroke="#c7b793" stroke-dasharray="3 3"/><text x="27" y="35" text-anchor="middle" font-size="19" font-family="Arial,sans-serif" fill="#a19376" stroke="none">¥</text><circle cx="48" cy="47" r="10" fill="#fff" stroke="#ccad73"/><text x="48" y="51" text-anchor="middle" font-size="13" font-family="Arial,sans-serif" fill="#92641c" stroke="none">0</text>';
+  }else{
+    const heights=[[],[2],[2,4],[2,4,6],[3,5,7]][level];
+    const xs=heights.length===1?[32]:heights.length===2?[23,43]:[13,32,51];
+    if(level===4)body+='<g transform="rotate(-9 31 19)"><rect x="8" y="8" width="42" height="23" rx="3" fill="#e2f0e5" stroke="#5c8d72"/><path d="M14 13h7m16 0h7M14 25h7" stroke="#7f9e88"/><text x="30" y="23" text-anchor="middle" font-size="15" font-family="Arial,sans-serif" fill="#4d7e63" stroke="none">¥</text></g>';
+    heights.forEach((height,col)=>{for(let n=0;n<height;n++){
+      const y=52-n*4;
+      body+='<path d="M'+(xs[col]-8)+' '+(y-3)+'v4c0 5 16 5 16 0v-4" fill="#efb743" stroke="#b88221" stroke-width="1.2"/><ellipse cx="'+xs[col]+'" cy="'+(y-3)+'" rx="8" ry="3" fill="#ffe299" stroke="#b88221" stroke-width="1.2"/>';
+    }});
+  }
+  return choiceSvg(body,'money',level);
+}
+function calendarAmount(level){
+  let body='<rect x="9" y="11" width="46" height="45" rx="7" fill="#f2f7fc"/><path d="M9 23h46M20 7v10M44 7v10"/>';
+  if(level===0)body+='<path d="M26 38h12" stroke-width="3"/>';
+  else{
+    for(let i=0;i<level;i++)body+='<rect x="'+(17+i*11)+'" y="30" width="7" height="8" rx="2" fill="currentColor" stroke="none"/>';
+    if(level===3)body+='<path d="M39 46h10m-5-5v10"/>';
+  }
+  return choiceSvg(body,'visits',level);
+}
+function expressionFace(mood){
+  const drawings={
+    confident:'<path d="m16 23 4-3 4 3m16 0 4-3 4 3M20 37q12 15 24 0Z" fill="#fff"/>',
+    hesitant:'<path d="M16 24q5 0 8-4m16 0q3 4 8 4M24 41q8-7 16 0"/><circle cx="20" cy="29" r="2" fill="currentColor"/><circle cx="44" cy="29" r="2" fill="currentColor"/>',
+    dislike:'<path d="m16 20 8 2m16 0 8-2M24 41q8-7 16 0"/><circle cx="20" cy="28" r="2" fill="currentColor"/><circle cx="44" cy="28" r="2" fill="currentColor"/>',
+    unknown:'<path d="M27 21c0-8 13-8 13 0 0 5-8 5-8 11m0 6v.2" stroke-width="3"/>',
+    smile:'<circle cx="21" cy="25" r="2" fill="currentColor"/><circle cx="43" cy="25" r="2" fill="currentColor"/><path d="M22 37q10 12 20 0"/>',
+    neutral:'<circle cx="21" cy="25" r="2" fill="currentColor"/><circle cx="43" cy="25" r="2" fill="currentColor"/><path d="M24 40h16"/>',
+    confused:'<path d="m16 21 9 2m14-2 8-3M22 41q5-6 10-1t10-1"/><circle cx="21" cy="28" r="2" fill="currentColor"/><circle cx="43" cy="28" r="2" fill="currentColor"/>',
+    warm:'<path d="m16 25 5-3 5 3m12 0 5-3 5 3M24 38q8 9 16 0"/><ellipse cx="16" cy="34" rx="5" ry="2.5" fill="#e8a7a0" stroke="none" opacity=".65"/><ellipse cx="48" cy="34" rx="5" ry="2.5" fill="#e8a7a0" stroke="none" opacity=".65"/>',
+    waiting:'<circle cx="21" cy="26" r="2" fill="currentColor"/><circle cx="40" cy="26" r="2" fill="currentColor"/><path d="M23 40h14"/><circle cx="51" cy="49" r="10" fill="#fff"/><path d="M51 43v7h5"/>',
+    inviting:'<path d="m16 25 5-3 5 3m12 0 5-3 5 3M23 38q9 10 18 0"/><path d="M49 47v-8a2 2 0 0 1 4 0v6-11a2 2 0 0 1 4 0v11-7a2 2 0 0 1 4 0v11c0 7-10 9-13 4l-3-5a2 2 0 0 1 3-2l1 1" fill="#fff" stroke-width="1.5"/>',
+    mixed:'<path d="M32 11v42" stroke-dasharray="2 4" opacity=".3"/><circle cx="21" cy="25" r="2" fill="currentColor"/><circle cx="43" cy="25" r="2" fill="currentColor"/><path d="M17 37q6 10 12 0m7 5q6-10 12 0"/>',
+    stop:'<circle cx="21" cy="25" r="2" fill="currentColor"/><circle cx="41" cy="25" r="2" fill="currentColor"/><path d="M23 39h13"/><path d="M45 48V36a2 2 0 0 1 4 0v7-13a2 2 0 0 1 4 0v13-11a2 2 0 0 1 4 0v12-8a2 2 0 0 1 4 0v14c0 10-11 12-16 5l-5-7a2 2 0 0 1 3-3l2 3" fill="#fff" stroke-width="1.5"/>',
+    away:'<circle cx="21" cy="25" r="2" fill="currentColor"/><circle cx="39" cy="25" r="2" fill="currentColor"/><path d="M23 40h11"/><rect x="37" y="42" width="26" height="17" rx="7" fill="#fff" stroke="none"/><path d="M41 50h18m-5-5 5 5-5 5"/>'
+  };
+  return choiceSvg('<circle cx="32" cy="32" r="29" fill="#f2f6fb" stroke="none"/><circle cx="32" cy="31" r="24"/>'+drawings[mood],'expression',mood);
+}
+function answerIllustration(q,op){
+  if(q.id==='Q1'||q.id==='Q3')return agePortrait(parseInt(op,10),q.id==='Q3');
+  if(['Q5','Q8','Q9'].includes(q.id))return peopleAmount(q.o.indexOf(op));
+  if(q.id==='Q10')return calendarAmount(op==='深い関係になったことがない'?0:q.o.indexOf(op)+1);
+  if(q.id==='Q11')return op==='女性とデートをしたことがない'?calendarAmount(0):moneyAmount(q.o.indexOf(op)+1);
+  if(q.id==='Q21')return moneyAmount(q.o.indexOf(op));
+  if(q.id==='Q17')return expressionFace({'得意':'confident','あまり得意ではない':'hesitant','スキンシップをやったことがない':'unknown'}[op]);
+  if(q.id==='Q16')return expressionFace(['smile','neutral','confused','warm','waiting','inviting','mixed','unknown'][q.o.indexOf(op)]);
+  if(q.id==='Q19')return expressionFace(['warm','stop','smile','inviting','away','dislike','unknown'][q.o.indexOf(op)]);
+  return '';
+}
+
+function updateQuestionDesign(q,pos,total){
+  const stage={'出会い':'deai','会話':'kaiwa','距離':'kyori'}[q.sec]||'';
+  const palette={deai:['#00877f','#f0faf8'],kaiwa:['#c76b00','#fffbf3'],kyori:['#155acb','#f3f7ff']};
+  const colors=palette[stage]||['#073c50','#f1f7f9'];
+  $('scr-q').style.setProperty('--q-accent',colors[0]);
+  $('scr-q').style.setProperty('--q-soft',colors[1]);
+  updateStageGuide('question-stages',stage);
+  const categoryLabel=q.sec==='距離'?'距離の縮め方':q.sec;
+  const categoryIcon={'基本情報':'person','出会い':'people','会話':'message','距離':'hand','あなたの悩み':'thought'}[q.sec];
+  $('qcat').innerHTML=designIcon(categoryIcon,'category-icon');
+  $('qcat').appendChild(document.createTextNode(categoryLabel));
+  $('qnum').textContent=pos+' / '+total+'問';
+  $('question-progress').setAttribute('aria-valuenow',String(Math.round(pos/total*100)));
+  $('opts').querySelectorAll('.opt').forEach((b,i)=>{
+    b.type='button';
+    b.setAttribute('aria-pressed',b.classList.contains('sel')?'true':'false');
+    const illustration=answerIllustration(q,q.o[i]);
+    if(illustration){
+      b.classList.add('has-illustration');
+      const text=document.createElement('span');text.className='option-text';text.textContent=q.o[i];
+      b.innerHTML=illustration;b.appendChild(text);
+    }else{
+      const choiceMap=(q.id==='Q13'||q.id==='Q14')?CHOICE_ICONS.TOPICS:CHOICE_ICONS[q.id];
+      const iconName=choiceMap&&choiceMap[q.o[i]];
+      if(iconName){
+        b.classList.add('has-icon');
+        const text=document.createElement('span');text.className='option-text';text.textContent=q.o[i];
+        b.innerHTML=designIcon(iconName,'option-icon');b.appendChild(text);
+      }
+    }
+  });
+}
+function updateResultDesign(pid){
+  updateStageGuide('result-stages',{'1':'deai','2':'kaiwa','3':'kyori'}[pid.charAt(0)]||'');
+  $('result-notice').textContent='';
+}
+function previewNotice(where){
+  const message='デモ版のため、案内への移動・登録は行いません。';
+  $(where==='result'?'result-notice':'start-notice').textContent=message;
+}
+const PREVIEW_BASE={Q1:'60代',Q2:'未婚',Q3:'20代',Q4:'彼女',Q5:'1人～5人',Q6:'ない',Q7:['職場の女性'],Q8:'1人～5人',Q9:'0人',Q10:'3回以上',Q11:'1000円～3000円',Q12:'横並び',Q13:'お互いの趣味',Q14:'今後のこと',Q15:'相手の話す量と自分の話す量が同じくらいになるように話す',Q16:'興味深そうな反応',Q17:'あまり得意ではない',Q18:'手を繋ぐ',Q19:'もっとしてほしそうにする',Q20:['そもそも女性経験が少ない'],Q21:'全く投資していない'};
+const PREVIEW_CASES={
+  '1-A':{Q5:'0人',Q7:['今は特にやっていない'],Q8:'0人',Q10:'深い関係になったことがない',Q11:'女性とデートをしたことがない',Q12:'女性と会話したことがない',Q17:'スキンシップをやったことがない'},
+  '1-B':{Q7:['マッチングアプリ'],Q8:'0人'},
+  '1-C':{Q7:['今は特にやっていない'],Q8:'0人'},
+  '2-A':{Q16:'そもそも女性の反応がわからない'},
+  '2-B':{Q13:'自己紹介',Q14:'自己紹介',Q16:'一応やりとりはしている感じの反応'},
+  '2-C':{Q16:'会話がかみ合っていない感じの反応'},
+  '3-A':{Q17:'スキンシップをやったことがない'},
+  '3-B':{Q19:'身体をよけられる'},
+  '3-C':{},
+  '4-A':{Q5:'6人～10人',Q8:'6人～10人',Q9:'1人～5人',Q20:['好みの女性となるとうまくいかない']},
+  '4-B':{Q5:'6人～10人',Q8:'6人～10人',Q9:'1人～5人',Q20:['ワンナイトはできるが既存化ができない']}
+};
+function sampleAnswers(pid){return JSON.parse(JSON.stringify(Object.assign({},PREVIEW_BASE,PREVIEW_CASES[pid]||{})))}
+function showPreviewStart(){show('scr-start');$('preview-type').value='';$('preview-question').value='';}
+function showPreviewQuestion(id='Q16'){ans=sampleAnswers('2-B');idx=Math.max(0,QUESTIONS.findIndex(q=>q.id===id));pattern=null;$('preview-question').value=QUESTIONS[idx].id;show('scr-q');render();}
+function showPreviewResult(pid){if(!PATTERNS.includes(pid))return;ans=sampleAnswers(pid);pattern=judge(ans);showPersonalizedResult(pattern);}
+QUESTIONS.forEach(q=>{const o=document.createElement('option');o.value=q.id;o.textContent=q.id+'｜'+q.t;$('preview-question').appendChild(o);});
+PATTERNS.forEach(pid=>{const o=document.createElement('option');o.value=pid;o.textContent=pid+'｜'+RESULT_META[pid].type;$('preview-type').appendChild(o);});
+window.previewNotice=previewNotice;window.showPreviewStart=showPreviewStart;
+window.showPreviewQuestion=showPreviewQuestion;window.showPreviewResult=showPreviewResult;
+
+/* インラインの onclick から呼ばれる関数だけを外に出す */
+window.startQuiz=startQuiz; window.goBack=goBack; window.goNext=goNext;
+window.onZoomTap=onZoomTap; window.restartQuiz=restartQuiz;
+})();
+</script>
+</body>
+</html>
