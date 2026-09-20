@@ -94,15 +94,21 @@ h1 em{color:#f24840;font-style:normal;font-size:41px}
 .category-icon{width:18px;height:18px;flex:none}
 .qtext{font-size:24px;font-weight:800;line-height:1.65;margin:17px 0 9px;overflow-wrap:anywhere}
 .qnote{font-size:12px;color:var(--sub);margin-bottom:22px}
+.qnote.multi-note{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;padding:9px 13px;border:2px solid var(--q-accent,var(--navy));border-radius:9px;background:var(--q-soft,#f1f7f9);color:var(--q-accent,var(--navy));font-size:14px;font-weight:900;line-height:1.5}
+.qnote.multi-note::before{content:"✓";display:grid;place-items:center;flex:none;width:21px;height:21px;border-radius:5px;background:var(--q-accent,var(--navy));color:#fff;font-size:13px}
 .opts{display:flex;flex-direction:column;gap:11px;margin:0 0 25px}
 .opt{width:100%;position:relative;display:flex;align-items:center;gap:13px;text-align:left;padding:17px 42px 17px 18px;min-height:74px;border:1.5px solid #cdd3d7;border-radius:13px;background:#fff;color:var(--tx);font-size:18px;font-weight:700;line-height:1.55}
 .opt::before{content:"";height:23px;width:23px;flex:none;border:2px solid #c6cfd4;border-radius:50%;background:#fff}
-.opt.cb::before{border-radius:5px}
+.opt.cb::before{display:none}
 .opt.sel{border-color:var(--q-accent,var(--c-kyori));background:var(--q-soft,#f1f6fe)}
 .opt.sel::before{border:7px solid var(--q-accent,var(--c-kyori))}
 .opt.sel::after{content:"✓";display:grid;place-items:center;position:absolute;right:13px;top:calc(50% - 12px);background:var(--q-accent,var(--c-kyori));color:#fff;width:24px;height:24px;border-radius:50%;font-size:16px}
+.opt.cb.sel::after{display:none}
 .opt:hover{border-color:var(--q-accent,var(--c-kyori))}
 .opt.has-illustration::before,.opt.has-icon::before{display:none}
+.multi-checkbox{display:grid;place-items:center;flex:none;width:26px;height:26px;border:2px solid #9daab1;border-radius:6px;background:#fff;color:#fff;font-size:17px;font-weight:900;line-height:1;box-shadow:inset 0 0 0 2px #fff}
+.opt.cb.sel .multi-checkbox{border-color:var(--q-accent,var(--c-kyori));background:var(--q-accent,var(--c-kyori))}
+.opt.cb.sel .multi-checkbox::after{content:"✓"}
 .option-icon{width:39px;height:39px;flex:none;padding:7px;border-radius:10px;background:var(--q-soft,#f1f7f9);color:var(--q-accent,var(--navy))}
 .opt.sel .option-icon{background:#fff}
 .option-illustration{display:block;width:62px;height:62px;flex:none;color:var(--q-accent,var(--navy))}
@@ -725,7 +731,9 @@ function render(){
   $('qnum').textContent='質問 '+pos+'／'+vl.length;
   $('barfill').style.width=Math.round(pos/vl.length*100)+'%';
   $('qtext').textContent=q.t;
-  $('qnote').textContent=q.multi?'当てはまるものを、すべて選んでください（複数選択できます）':'当てはまるものを、1つ選んでください';
+  const qnote=$('qnote');
+  qnote.className=q.multi?'qnote multi-note':'qnote';
+  qnote.textContent=q.multi?'複数選択可｜当てはまるものをすべて選んでください':'当てはまるものを、1つ選んでください';
   const box=$('opts');box.innerHTML='';
   q.o.forEach(op=>{
     const b=document.createElement('button');b.className=q.multi?'opt cb':'opt';b.textContent=op;
@@ -981,7 +989,15 @@ function updateQuestionDesign(q,pos,total){
   $('question-progress').setAttribute('aria-valuenow',String(Math.round(pos/total*100)));
   $('opts').querySelectorAll('.opt').forEach((b,i)=>{
     b.type='button';
-    b.setAttribute('aria-pressed',b.classList.contains('sel')?'true':'false');
+    if(q.multi){
+      b.setAttribute('role','checkbox');
+      b.setAttribute('aria-checked',b.classList.contains('sel')?'true':'false');
+      b.removeAttribute('aria-pressed');
+    }else{
+      b.removeAttribute('role');
+      b.removeAttribute('aria-checked');
+      b.setAttribute('aria-pressed',b.classList.contains('sel')?'true':'false');
+    }
     const illustration=answerIllustration(q,q.o[i]);
     if(illustration){
       b.classList.add('has-illustration');
@@ -995,6 +1011,12 @@ function updateQuestionDesign(q,pos,total){
         const text=document.createElement('span');text.className='option-text';text.textContent=q.o[i];
         b.innerHTML=designIcon(iconName,'option-icon');b.appendChild(text);
       }
+    }
+    if(q.multi){
+      const checkbox=document.createElement('span');
+      checkbox.className='multi-checkbox';
+      checkbox.setAttribute('aria-hidden','true');
+      b.prepend(checkbox);
     }
   });
 }
